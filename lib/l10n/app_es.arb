@@ -1,3 +1,4 @@
 {
-    "helloWorld": "¡Hola Mundo!"
-}
+    "phoneNumber": "Número de teléfono",
+    "password": "Contraseña"
+  }
