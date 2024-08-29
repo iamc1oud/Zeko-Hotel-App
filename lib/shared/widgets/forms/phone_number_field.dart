@@ -26,7 +26,9 @@ class Country {
 }
 
 class PhoneNumberField extends StatefulWidget {
-  const PhoneNumberField({super.key});
+  final Function onChanged;
+
+  const PhoneNumberField({super.key, required this.onChanged});
 
   @override
   _PhoneNumberFieldState createState() => _PhoneNumberFieldState();
@@ -56,7 +58,16 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   Widget build(BuildContext context) {
     return _selectedCountry == null
         ? const CircularProgressIndicator()
-        : TextField(
+        : TextFormField(
+            validator: (v) {
+              if (v!.isEmpty) {
+                return 'Required';
+              }
+              return null;
+            },
+            onChanged: (v) {
+              widget.onChanged.call('${_selectedCountry!.number}$v');
+            },
             decoration: InputDecoration(
               hintText: Strings!.phoneNumber,
               floatingLabelAlignment: FloatingLabelAlignment.start,

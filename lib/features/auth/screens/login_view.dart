@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dropdown_alert/alert_controller.dart';
+import 'package:flutter_dropdown_alert/model/data_alert.dart';
 import 'package:zeko_hotel_crm/assets.dart';
+import 'package:zeko_hotel_crm/core/navigation/app_navigation.dart';
+import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
+import 'package:zeko_hotel_crm/features/order_management/screens/order_management_screens.dart';
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/buttons/animated_button.dart';
 import 'package:zeko_hotel_crm/shared/widgets/dismiss_keyboard.dart';
 import 'package:zeko_hotel_crm/shared/widgets/forms/phone_number_field.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -19,6 +24,9 @@ class _LoginViewState extends State<LoginView>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+
+  // Form text controllers
+  TextEditingController phoneNumberController = TextEditingController();
 
   @override
   void initState() {
@@ -35,6 +43,14 @@ class _LoginViewState extends State<LoginView>
     );
 
     _animationController.forward();
+
+    SchedulerBinding.instance.addPostFrameCallback((v) {
+      final authCubit = BlocProvider.of<AuthCubit>(context);
+
+      if (authCubit.state.isSignedIn == true) {
+        AppNavigator.slideReplacement(const OrderManagementTabView());
+      }
+    });
   }
 
   @override
@@ -43,10 +59,10 @@ class _LoginViewState extends State<LoginView>
     super.dispose();
   }
 
-  ButtonState? state;
-
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
+
     return DismissKeyboard(
       child: Scaffold(
           body: AnimatedSwitcher(
@@ -55,53 +71,58 @@ class _LoginViewState extends State<LoginView>
               key: const ValueKey(2),
               opacity: _fadeAnimation,
               child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _LogoWithGradient(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Enter your mobile number",
-                          style: textStyles.titleLarge,
-                        ),
-                        Spacing.hlg,
-                        const PhoneNumberField(),
-                        Spacing.hlg,
-                        TextFormField(
-                          obscureText: true,
-                        ).addLabel(Strings!.password),
-                        Spacing.hlg,
-                        Row(
-                          children: [
-                            AnimatedButton(
-                              state: state,
-                              onPressed: () {
-                                setState(() {
-                                  state = ButtonState.loading;
-                                });
-                                Future.delayed(const Duration(seconds: 2), () {
-                                  setState(() {
-                                    state = ButtonState.idle;
-                                  });
-                                });
-                              },
-                              child: const Text('Login'),
-                            ).expanded(),
-                            Spacing.wlg,
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  'Forgot password?',
-                                  style: textStyles.bodySmall,
-                                )),
-                          ],
-                        ),
-                      ],
-                    ).padding(Paddings.contentPadding),
-                  ],
+                child: BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, authState) {
+                    return Form(
+                      key: authCubit.loginFormKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _LogoWithGradient(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Enter your mobile number",
+                                style: textStyles.titleLarge,
+                              ),
+                              Spacing.hlg,
+                              PhoneNumberField(onChanged: (phoneNumber) {
+                                authCubit.phoneNumberController.text =
+                                    phoneNumber;
+                              }),
+                              Spacing.hlg,
+                              TextFormField(
+                                controller: authCubit.passwordController,
+                                validator: (v) {
+                                  if (v!.isEmpty) {
+                                    return 'Password is required';
+                                  }
+                                  return null;
+                                },
+                                obscureText: true,
+                              ).addLabel(Strings!.password),
+                              Spacing.hlg,
+                              AnimatedButton(
+                                state: authState.loadingState,
+                                onPressed: () async {
+                                  authCubit.loginStaff();
+                                },
+                                child: const Text('Login'),
+                              ),
+                              TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    'Forgot password?',
+                                    style: textStyles.bodySmall,
+                                  ))
+                            ],
+                          ).padding(Paddings.contentPadding),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
