@@ -1,6 +1,6 @@
 class PendingOrdersDto {
   final List<Order> escalatedOrders;
-  final Map<String, List<dynamic>> otherCategories;
+  final Map<String, List<Order>> otherCategories;
 
   PendingOrdersDto({
     required this.escalatedOrders,
@@ -14,11 +14,11 @@ class PendingOrdersDto {
         .toList();
 
     // Extract other dynamic categories
-    Map<String, List<dynamic>> otherCategories = {};
+    Map<String, List<Order>> otherCategories = {};
 
     json.forEach((key, value) {
       if (key != 'Escalated Orders') {
-        otherCategories[key] = List<dynamic>.from(value);
+        otherCategories[key] = List<Order>.from(value);
       }
     });
 

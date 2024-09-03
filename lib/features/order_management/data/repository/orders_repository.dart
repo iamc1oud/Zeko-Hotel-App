@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:zeko_hotel_crm/core/networking/networking.dart';
 import 'package:zeko_hotel_crm/core/networking/response_api.dart';
 
@@ -18,17 +17,11 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<ApiResponse<PendingOrdersDto>> getPendingOrders() async {
     try {
       final response =
-          await httpService.post(OrderManagementEndpoints.listPendingOrder, {
-        "start_time": "2024-08-21T18:30:00.000Z",
-        "end_time": "2024-08-29T18:29:59.999Z",
-        "hotel_id": 34,
-        "hotel": 34
-      });
+          await httpService.post(OrderManagementEndpoints.listPendingOrder);
 
       return response.fold((error) {
         throw error;
       }, (success) {
-        debugPrint(success.toString());
         return ApiResponse<PendingOrdersDto>.fromJson(
             success, PendingOrdersDto.fromJson);
       });

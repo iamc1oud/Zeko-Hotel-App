@@ -14,6 +14,18 @@ class ManageOrdersCubit extends Cubit<ManageOrdersState> {
   Future getPendingOrders() async {
     var result = await orderRepository.getPendingOrders();
 
-    emit(state.copyWith(escalatedOrders: result.data?.escalatedOrders));
+    List<Order> otherOrders = List.empty(growable: true);
+
+    // Loop over each category and add to list
+    result.data?.otherCategories.forEach((key, orders) {
+      print("KEY: $key");
+
+      otherOrders.addAll(orders);
+    });
+
+    // Loop over other order categories
+    emit(state.copyWith(
+        escalatedOrders: result.data?.escalatedOrders,
+        otherOrders: otherOrders));
   }
 }

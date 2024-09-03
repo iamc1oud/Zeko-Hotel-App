@@ -12,8 +12,8 @@ class HttpService {
 
   HttpService({this.baseUrl});
 
-  Future<Either<Exception, Map<String, dynamic>>> post(
-      String endpoint, Map<String, dynamic> body) async {
+  Future<Either<Exception, Map<String, dynamic>>> post(String endpoint,
+      [Map<String, dynamic>? body]) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$endpoint'),

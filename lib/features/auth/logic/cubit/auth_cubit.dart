@@ -3,8 +3,11 @@ import 'package:flutter_dropdown_alert/alert_controller.dart';
 import 'package:flutter_dropdown_alert/model/data_alert.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zeko_hotel_crm/core/navigation/app_navigation.dart';
 import 'package:zeko_hotel_crm/core/storage/storage.dart';
 import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dart';
+import 'package:zeko_hotel_crm/features/home_screen/screens/bottom_navigation_bar.dart';
+import 'package:zeko_hotel_crm/features/order_management/screens/order_management_screens.dart';
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/widgets.dart';
 
@@ -34,14 +37,13 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   @override
   AuthState? fromJson(Map<String, dynamic> json) {
-    return AuthState(isSignedIn: json['isSignedIn']);
+    return AuthState(
+        isSignedIn: json['isSignedIn'], isSuperuser: json['isSuperuser']);
   }
 
   @override
   Map<String, dynamic>? toJson(AuthState state) {
-    return {
-      'isSignedIn': state.isSignedIn,
-    };
+    return {'isSignedIn': state.isSignedIn, 'isSuperuser': state.isSuperuser};
   }
 
   Future loginStaff() async {
@@ -60,8 +62,6 @@ class AuthCubit extends HydratedCubit<AuthState> {
       } else {
         var accessToken = result.data!.token!.access!;
 
-        debugPrint('Saved token: $accessToken');
-
         // Save the token in preferences.
         getIt
             .get<SharedPreferences>()
@@ -69,7 +69,14 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
         AlertController.show('Logged In', result.message!, TypeAlert.success);
 
-        emit(state.copyWith(isSignedIn: true, loadingState: ButtonState.idle));
+        AppNavigator.slideReplacement(const HomeScreen());
+
+        emit(state.copyWith(
+          isSignedIn: true,
+          loadingState: ButtonState.idle,
+          isSuperuser: result.data?.isSuperuser,
+          // TODO: Add department info in state
+        ));
       }
     }
   }

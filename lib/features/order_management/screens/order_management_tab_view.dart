@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/repository/orders_repository.dart';
 import 'package:zeko_hotel_crm/features/order_management/logic/cubit/manage_orders_cubit.dart';
 import 'package:zeko_hotel_crm/features/order_management/screens/list_orders/pending_orders_list_view.dart';
@@ -23,9 +24,9 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
       ],
       child: Builder(builder: (context) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Order Management'),
-          ),
+          floatingActionButton: FloatingActionButton(onPressed: () {
+            context.read<AuthCubit>().clear();
+          }),
           body: BlocProvider.value(
             value: context.read<ManageOrdersCubit>(),
             child: const PendingOrdersListView(),

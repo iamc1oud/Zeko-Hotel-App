@@ -6,6 +6,7 @@ import 'package:flutter_dropdown_alert/model/data_alert.dart';
 import 'package:zeko_hotel_crm/assets.dart';
 import 'package:zeko_hotel_crm/core/navigation/app_navigation.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
+import 'package:zeko_hotel_crm/features/home_screen/screens/bottom_navigation_bar.dart';
 import 'package:zeko_hotel_crm/features/order_management/screens/order_management_screens.dart';
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/buttons/animated_button.dart';
@@ -48,7 +49,7 @@ class _LoginViewState extends State<LoginView>
       final authCubit = BlocProvider.of<AuthCubit>(context);
 
       if (authCubit.state.isSignedIn == true) {
-        AppNavigator.slideReplacement(const OrderManagementTabView());
+        AppNavigator.slideReplacement(const HomeScreen());
       }
     });
   }

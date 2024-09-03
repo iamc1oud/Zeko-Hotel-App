@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeko_hotel_crm/core/date_parser.dart';
-import 'package:zeko_hotel_crm/features/auth/screens/login_view.dart';
 import 'package:zeko_hotel_crm/features/order_management/logic/cubit/manage_orders_cubit.dart';
 import 'package:zeko_hotel_crm/main.dart';
-import 'package:zeko_hotel_crm/utils/extensions/extension.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 import '../../data/entities/pending_orders_dto.dart';
@@ -33,18 +30,19 @@ class _PendingOrdersListViewState extends State<PendingOrdersListView> {
           children: [
             Row(
               children: [
-                const Icon(Icons.hourglass_empty_rounded),
+                const Icon(Icons.fastfood_outlined),
+                Spacing.wsm,
                 Text(
-                  'Pending Orders',
-                  style: textStyles.bodyMedium,
+                  'Orders',
+                  style: textStyles.headlineSmall,
                 )
               ],
             ).padding(Paddings.contentPadding),
             ListView.builder(
               padding: Paddings.horizontalPadding,
-              itemCount: orderState.escalatedOrders.length,
+              itemCount: orderState.otherOrders.length,
               itemBuilder: (context, index) {
-                var order = orderState.escalatedOrders.elementAt(index);
+                var order = orderState.otherOrders.elementAt(index);
 
                 return _OrderCard(order: order);
               },
