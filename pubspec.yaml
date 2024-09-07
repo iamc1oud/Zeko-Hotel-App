@@ -15,18 +15,29 @@ dependencies:
   # State Management
   flutter_bloc: ^8.1.6
   hydrated_bloc: ^9.1.5
+  get_it: ^7.7.0
+  dartz: ^0.10.1
 
   # Local Storage
   shared_preferences: ^2.3.2
+  path_provider: ^2.1.4
 
   # Networking
   http: ^1.2.2
 
   # Language Support
-
   flutter_localizations:
     sdk: flutter
   intl: any
+
+  # UI
+  skeletonizer: ^1.4.2
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.10+1
+  lottie: ^3.1.2
+  flutter_dropdown_alert: ^1.0.7
+  logger: ^2.4.0
+  scaled_app: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +48,9 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/platform/
+    - assets/lottie/
+    - assets/country-code-with-flag.json
