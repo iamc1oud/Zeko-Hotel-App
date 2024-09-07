@@ -41,9 +41,29 @@ extension TextFormFieldExtension on Widget {
   }
 }
 
+extension StringExtension on String {
+  String removeZero() {
+    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+
+    String s = toString().replaceAll(regex, '');
+    return s;
+  }
+}
+
 extension Common on Widget {
   Widget padding(EdgeInsets p) {
     return Padding(padding: p, child: this);
+  }
+
+  Widget horizontalGapZero() {
+    return Theme(
+        data: ThemeData(
+            listTileTheme: const ListTileThemeData(
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                horizontalTitleGap: 1,
+                contentPadding: EdgeInsets.zero)),
+        child: this);
   }
 
   Widget ignore(bool v) {

@@ -1,5 +1,6 @@
 import 'package:zeko_hotel_crm/core/networking/networking.dart';
 import 'package:zeko_hotel_crm/core/networking/response_api.dart';
+import 'package:zeko_hotel_crm/features/auth/data/dtos/hotel_details_response_dto.dart';
 import 'package:zeko_hotel_crm/features/auth/data/dtos/staff_login_request_dto.dart';
 import 'package:zeko_hotel_crm/features/auth/data/dtos/staff_login_response_dto.dart';
 import 'package:zeko_hotel_crm/features/auth/data/endpoints.dart';
@@ -7,6 +8,8 @@ import 'package:zeko_hotel_crm/features/auth/data/endpoints.dart';
 abstract class AuthRepository {
   Future<ApiResponse<StaffLoginDto>> staffLogin(
       {required String phoneNumber, required String password});
+
+  Future<HotelDetailsDTO> hotelDetails();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -27,6 +30,19 @@ class AuthRepositoryImpl implements AuthRepository {
           response, StaffLoginDto.fromJson);
     } catch (e) {
       return ApiResponse(data: null, message: 'Error');
+    }
+  }
+
+  @override
+  Future<HotelDetailsDTO> hotelDetails() async {
+    try {
+      final response = await httpService.post(
+        AuthEndpoints.aboutHotel,
+      );
+
+      return HotelDetailsDTO.fromJson(response);
+    } catch (e) {
+      return HotelDetailsDTO(detail: null);
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeko_hotel_crm/core/navigation/app_navigation.dart';
 import 'package:zeko_hotel_crm/core/storage/storage.dart';
+import 'package:zeko_hotel_crm/features/auth/data/dtos/hotel_details_response_dto.dart';
 import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dart';
 import 'package:zeko_hotel_crm/features/home_screen/screens/bottom_navigation_bar.dart';
 import 'package:zeko_hotel_crm/features/order_management/screens/order_management_screens.dart';
@@ -44,12 +45,19 @@ class AuthCubit extends HydratedCubit<AuthState> {
   @override
   AuthState? fromJson(Map<String, dynamic> json) {
     return AuthState(
-        isSignedIn: json['isSignedIn'], isSuperuser: json['isSuperuser']);
+      isSignedIn: json['isSignedIn'],
+      isSuperuser: json['isSuperuser'],
+      // hotelDetails: json['hotelDetails']
+    );
   }
 
   @override
   Map<String, dynamic>? toJson(AuthState state) {
-    return {'isSignedIn': state.isSignedIn, 'isSuperuser': state.isSuperuser};
+    return {
+      'isSignedIn': state.isSignedIn,
+      'isSuperuser': state.isSuperuser,
+      // 'hotelDetails': state.hotelDetails?.toJson()
+    };
   }
 
   Future loginStaff() async {
@@ -71,19 +79,29 @@ class AuthCubit extends HydratedCubit<AuthState> {
         var accessToken = result.data!.token!.access!;
 
         // Save the token in preferences.
-        getIt
+        await getIt
             .get<SharedPreferences>()
             .setString(PrefKeys.token.name, accessToken);
-
-        AppNavigator.slideReplacement(const HomeScreen());
 
         emit(state.copyWith(
           isSignedIn: true,
           loadingState: ButtonState.idle,
           isSuperuser: result.data?.isSuperuser,
-          // TODO: Add department info in state
         ));
+
+        AppNavigator.slideReplacement(const HomeScreen());
       }
     }
+  }
+
+  Future getHotelDetails() async {
+    var result = await authRepository.hotelDetails();
+
+    // Save currency in prefs.
+    getIt
+        .get<SharedPreferences>()
+        .setString(PrefKeys.curreny.name, result.detail!.currency!);
+
+    emit(state.copyWith(hotelDetails: result));
   }
 }

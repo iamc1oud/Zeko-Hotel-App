@@ -100,7 +100,7 @@ extension DateParser on String {
   }
 
   String toCustom(String pattern) {
-    var format = DateFormat(pattern).format(DateTime.parse(this));
+    var format = DateFormat(pattern).format(DateTime.parse(this).toLocal());
     return format;
   }
 

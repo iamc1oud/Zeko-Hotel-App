@@ -6,7 +6,8 @@ import 'package:zeko_hotel_crm/main.dart';
 
 void injecteDependencies() {
   // Add dependencies here
-  getIt.registerSingleton(HttpService(baseUrl: "http://192.168.1.19:8000"));
+  // getIt.registerSingleton(HttpService(baseUrl: "http://192.168.1.19:8000"));
+  getIt.registerSingleton(HttpService(baseUrl: "https://dev.zeko.tech"));
   getIt.registerSingletonAsync(() => SharedPreferences.getInstance());
 
   // Repositories

@@ -117,10 +117,10 @@ class OrderItem {
 
 class ItemDetails {
   final int id;
-  final String name;
-  final double price;
-  final double discPrice;
-  final bool isVeg;
+  final String? name;
+  final double? price;
+  final double? discPrice;
+  final bool? isVeg;
   final String? image;
   final String? description;
 
