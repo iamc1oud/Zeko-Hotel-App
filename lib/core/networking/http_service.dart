@@ -21,8 +21,6 @@ class HttpService {
   }) async {
     var token = getIt.get<SharedPreferences>().getString(PrefKeys.token.name);
 
-    logger.d(token);
-
     final url = buildUrl(endpoint: endpoint);
 
     Map<String, dynamic> requestHeaders =

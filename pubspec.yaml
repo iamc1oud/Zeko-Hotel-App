@@ -38,6 +38,9 @@ dependencies:
   flutter_dropdown_alert: ^1.0.7
   logger: ^2.4.0
   scaled_app: ^2.3.0
+  cached_network_image: ^3.4.1
+  flutter_animate: ^4.5.0
+  fluttericon: ^2.0.0
 
 dev_dependencies:
   flutter_test:

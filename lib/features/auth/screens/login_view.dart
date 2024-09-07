@@ -48,6 +48,8 @@ class _LoginViewState extends State<LoginView>
     SchedulerBinding.instance.addPostFrameCallback((v) {
       final authCubit = BlocProvider.of<AuthCubit>(context);
 
+      logger.d(authCubit.state.isSignedIn);
+
       if (authCubit.state.isSignedIn == true) {
         AppNavigator.slideReplacement(const HomeScreen());
       }
@@ -110,7 +112,9 @@ class _LoginViewState extends State<LoginView>
                                 onPressed: () async {
                                   authCubit.loginStaff();
                                 },
-                                child: const Text('Login'),
+                                child: const Text(
+                                  'Login',
+                                ),
                               ),
                               TextButton(
                                   onPressed: () {},

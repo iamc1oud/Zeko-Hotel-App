@@ -1,1 +1,1 @@
-enum PrefKeys { token }
+enum PrefKeys { token, curreny }

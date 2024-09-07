@@ -78,7 +78,7 @@ class ZekoApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-        fontFamily: GoogleFonts.poppins().fontFamily,
+        fontFamily: GoogleFonts.roboto().fontFamily,
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 0,
@@ -96,7 +96,8 @@ class ZekoApp extends StatelessWidget {
         inputDecorationTheme: const InputDecorationTheme(
             border: OutlineInputBorder(borderRadius: Corners.medBorder),
             isDense: true),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // TODO: Configure color later
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
         useMaterial3: false,
       ),
       builder: (context, child) {
