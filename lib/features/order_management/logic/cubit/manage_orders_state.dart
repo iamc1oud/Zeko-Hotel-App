@@ -1,19 +1,15 @@
 part of 'manage_orders_cubit.dart';
 
 class ManageOrdersState {
-  List<Order> escalatedOrders = [];
+  List<OrderCategory>? categories;
+  bool? isLoading;
 
-  List<Order> otherOrders = [];
-
-  ManageOrdersState({
-    this.escalatedOrders = const [],
-    this.otherOrders = const [],
-  });
+  ManageOrdersState({this.categories = const [], this.isLoading = false});
 
   ManageOrdersState copyWith(
-      {List<Order>? escalatedOrders, List<Order>? otherOrders}) {
+      {List<OrderCategory>? categories, bool? isLoading}) {
     return ManageOrdersState(
-        otherOrders: otherOrders ?? this.otherOrders,
-        escalatedOrders: escalatedOrders ?? this.escalatedOrders);
+        categories: categories ?? this.categories,
+        isLoading: isLoading ?? this.isLoading);
   }
 }

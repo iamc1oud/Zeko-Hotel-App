@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 
 import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders_dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/repository/orders_repository.dart';
+import 'package:zeko_hotel_crm/main.dart';
 
 part 'manage_orders_state.dart';
 
@@ -12,20 +13,22 @@ class ManageOrdersCubit extends Cubit<ManageOrdersState> {
       : super(ManageOrdersState());
 
   Future getPendingOrders() async {
+    emit(state.copyWith(isLoading: true));
     var result = await orderRepository.getPendingOrders();
 
-    List<Order> otherOrders = List.empty(growable: true);
+    result.fold((l) {}, (r) {
+      // Filter the orders
+      List<OrderCategory> allOrders = [];
 
-    // Loop over each category and add to list
-    result.data?.otherCategories.forEach((key, orders) {
-      print("KEY: $key");
+      r.data?.categories.forEach(
+        (key, value) {
+          allOrders.addAll(value);
+        },
+      );
 
-      otherOrders.addAll(orders);
+      logger.d(allOrders);
+
+      emit(state.copyWith(categories: allOrders, isLoading: false));
     });
-
-    // Loop over other order categories
-    emit(state.copyWith(
-        escalatedOrders: result.data?.escalatedOrders,
-        otherOrders: otherOrders));
   }
 }

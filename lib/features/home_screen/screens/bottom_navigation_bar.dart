@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeko_hotel_crm/features/analytics/screens/analytics_screens.dart';
 import 'package:zeko_hotel_crm/features/order_management/screens/order_management_screens.dart';
-import 'package:zeko_hotel_crm/main.dart';
-import 'package:zeko_hotel_crm/shared/widgets/curved_bottom_nav/curved_bottom_nav.dart';
+
+import '../../auth/logic/cubit/auth_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _scrollController = ScrollController();
   var _currentPage = 0;
 
   final tabs = [
@@ -24,14 +24,28 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Zeko'),
+        title: const Text('Zeko'),
         actions: [
           IconButton(
               onPressed: () {},
-              icon: Badge.count(count: 10, child: Icon(Icons.notifications)))
+              icon: Badge.count(
+                  count: 10, child: const Icon(Icons.notifications)))
         ],
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Spacer(),
+            TextButton.icon(
+                icon: Icon(Icons.logout_outlined),
+                label: Text('Log out'),
+                onPressed: () {
+                  context.read<AuthCubit>().clear();
+                }),
+          ],
+        ),
+      ),
       body: tabs.elementAt(_currentPage),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentPage,
@@ -43,9 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
           showUnselectedLabels: false,
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.analytics), label: 'Analytics'),
+                icon: Icon(Icons.analytics_outlined), label: 'Analytics'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.food_bank), label: 'Orders')
+                icon: Icon(Icons.food_bank_outlined), label: 'Orders')
           ]),
     );
   }

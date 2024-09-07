@@ -8,7 +8,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scaled_app/scaled_app.dart';
 import 'package:zeko_hotel_crm/core/core.dart';
 import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
@@ -24,11 +26,19 @@ final AppMediaQuery = MediaQuery.of(navigatorKey.currentContext!);
 final ThemeQuery = Theme.of(navigatorKey.currentContext!).colorScheme;
 TextTheme textStyles = Theme.of(navigatorKey.currentContext!).textTheme;
 
+final logger = Logger();
+
 // Global service locator
 GetIt getIt = GetIt.instance;
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  ScaledWidgetsFlutterBinding.ensureInitialized(
+    scaleFactor: (deviceSize) {
+      // screen width used in your UI design
+      const double widthOfDesign = 375;
+      return deviceSize.width / widthOfDesign;
+    },
+  );
 
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb

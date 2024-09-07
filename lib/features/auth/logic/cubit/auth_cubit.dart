@@ -36,6 +36,12 @@ class AuthCubit extends HydratedCubit<AuthState> {
   }
 
   @override
+  Future<void> clear() {
+    Navigator.of(navigatorKey.currentContext!).popUntil((v) => true);
+    return super.clear();
+  }
+
+  @override
   AuthState? fromJson(Map<String, dynamic> json) {
     return AuthState(
         isSignedIn: json['isSignedIn'], isSuperuser: json['isSuperuser']);
@@ -55,6 +61,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
           phoneNumber: phoneNumberController.text.replaceAll('+', ''),
           password: passwordController.text);
 
+      logger.d(result);
+
       if (result.data!.isPasswordCorrect == false) {
         AlertController.show('Invalid password',
             '${result.data?.isPasswordCorrect.toString()}', TypeAlert.error);
@@ -66,8 +74,6 @@ class AuthCubit extends HydratedCubit<AuthState> {
         getIt
             .get<SharedPreferences>()
             .setString(PrefKeys.token.name, accessToken);
-
-        AlertController.show('Logged In', result.message!, TypeAlert.success);
 
         AppNavigator.slideReplacement(const HomeScreen());
 

@@ -24,9 +24,6 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
       ],
       child: Builder(builder: (context) {
         return Scaffold(
-          floatingActionButton: FloatingActionButton(onPressed: () {
-            context.read<AuthCubit>().clear();
-          }),
           body: BlocProvider.value(
             value: context.read<ManageOrdersCubit>(),
             child: const PendingOrdersListView(),
