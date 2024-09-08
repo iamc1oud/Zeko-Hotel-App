@@ -42,6 +42,9 @@ dependencies:
   flutter_animate: ^4.5.0
   fluttericon: ^2.0.0
   equatable: ^2.0.5
+  fl_chart: ^0.69.0
+  flutter_date_range_picker: ^0.1.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

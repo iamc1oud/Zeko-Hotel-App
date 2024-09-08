@@ -41,9 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                   onPressed: () {},
                   icon: Badge.count(
-                      isLabelVisible: false,
-                      count: 0,
-                      child: const Icon(Icons.notifications_outlined)))
+                      count: 0, child: const Icon(Icons.fastfood_outlined))),
+              Spacing.wlg
             ],
           ),
           drawer: const Drawer(

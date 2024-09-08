@@ -12,6 +12,8 @@ import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scaled_app/scaled_app.dart';
 import 'package:zeko_hotel_crm/core/core.dart';
+import 'package:zeko_hotel_crm/features/analytics/data/repository/analytics_repository.dart';
+import 'package:zeko_hotel_crm/features/analytics/logic/analytics/analytics_cubit.dart';
 import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:zeko_hotel_crm/features/auth/screens/auth_screens.dart';
@@ -29,7 +31,7 @@ TextTheme textStyles = Theme.of(navigatorKey.currentContext!).textTheme;
 final logger = Logger();
 
 // Global service locator
-GetIt getIt = GetIt.instance;
+var getIt = GetIt.instance;
 
 Future<void> main() async {
   ScaledWidgetsFlutterBinding.ensureInitialized(
@@ -40,20 +42,20 @@ Future<void> main() async {
     },
   );
 
+  // Load DI
+  await injecteDependencies();
+
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getApplicationDocumentsDirectory(),
   );
 
-  // Load DI
-  injecteDependencies();
-
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
           create: (context) =>
-              AuthCubit(authRepository: getIt.get<AuthRepositoryImpl>())),
+              AuthCubit(authRepository: getIt.get<AuthRepository>())),
     ],
     child: const ZekoApp(),
   ));
@@ -64,8 +66,6 @@ class ZekoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final styles = Theme.of(context).textTheme;
-
     return MaterialApp(
       title: 'Zeko',
       debugShowCheckedModeBanner: false,
