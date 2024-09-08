@@ -41,6 +41,7 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_animate: ^4.5.0
   fluttericon: ^2.0.0
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
