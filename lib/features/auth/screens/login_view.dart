@@ -48,8 +48,6 @@ class _LoginViewState extends State<LoginView>
     SchedulerBinding.instance.addPostFrameCallback((v) {
       final authCubit = BlocProvider.of<AuthCubit>(context);
 
-      logger.d(authCubit.state.isSignedIn);
-
       if (authCubit.state.isSignedIn == true) {
         AppNavigator.slideReplacement(const HomeScreen());
       }

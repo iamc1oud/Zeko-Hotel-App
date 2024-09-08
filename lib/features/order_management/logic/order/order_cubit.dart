@@ -1,20 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders_dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/repository/orders_repository.dart';
+import 'package:zeko_hotel_crm/features/order_management/logic/manage_orders/manage_orders_cubit.dart';
 import 'package:zeko_hotel_crm/main.dart';
+import 'package:zeko_hotel_crm/utils/alerts.dart';
 
 part 'order_state.dart';
 
 class OrderCubit extends Cubit<OrderState> {
   late OrderRepository orderRepository;
+  late ManageOrdersCubit manageOrdersCubit;
 
-  OrderCubit({
-    required this.orderRepository,
-  }) : super(OrderState());
+  OrderCubit({required this.orderRepository, required this.manageOrdersCubit})
+      : super(OrderState());
 
   set setOrder(OrderCategory order) {
     var items = List<Order$Items>.empty(growable: true);
@@ -47,11 +47,62 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   Future acceptOrder() async {
+    // Show loading state
     emit(state.copyWith(isLoading: true));
 
-    var response = await orderRepository
-        .acceptOrder(AcceptOrderDTO(orderId: state.order!.id));
+    // Check if all items are selected
+    bool allItemsSelected = state.items!.every((item) => item.isSelected!);
 
-    response.fold((l) {}, (r) {});
+    if (allItemsSelected) {
+      var response = await orderRepository.acceptOrder(
+        AcceptOrderDTO(orderId: state.order!.id),
+      );
+
+      response.fold((l) {
+        // Handle error
+        emit(state.copyWith(isLoading: false));
+      }, (r) {
+        // Show success message and refresh list
+        showSnackbar(r.message);
+        emit(state.copyWith(isLoading: false));
+        manageOrdersCubit.getPendingOrders();
+      });
+    } else {
+      var partialItems =
+          state.items!.where((item) => item.isSelected!).toList();
+
+      var command = AcceptOrderDTO(
+        orderId: state.order!.id,
+        items: partialItems.map((e) => e.id).toList(),
+      );
+
+      var partialResponse = await orderRepository.partialAcceptOrder(command);
+
+      partialResponse.fold((l) {
+        // Handle error for partial acceptance
+        emit(state.copyWith(isLoading: false));
+      }, (r) {
+        // Show success message and refresh list for partial order
+        showSnackbar(r.message);
+        emit(state.copyWith(isLoading: false));
+        manageOrdersCubit.getPendingOrders();
+      });
+    }
+  }
+
+  Future rejectOrder(String reason) async {
+    var command = RejectOrderDTO(orderId: state.order!.id, reason: reason);
+
+    var response = await orderRepository.rejectOrder(command);
+
+    response.fold((l) {
+      // Handle error for partial acceptance
+      emit(state.copyWith(isLoading: false));
+    }, (r) {
+      // Show success message and refresh list for partial order
+      showSnackbar(r.message);
+      emit(state.copyWith(isLoading: false));
+      manageOrdersCubit.getPendingOrders();
+    });
   }
 }

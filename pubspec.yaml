@@ -57,4 +57,5 @@ flutter:
   assets:
     - assets/platform/
     - assets/lottie/
+    - assets/icons/
     - assets/country-code-with-flag.json

@@ -31,3 +31,34 @@ class ApiResponse<T> {
     return jsonEncode(toJson());
   }
 }
+
+class ListingApiResponse<T> {
+  List<T>? data;
+  String? message;
+  bool? status;
+  String? errorCode;
+
+  ListingApiResponse({this.data, this.message, this.status, this.errorCode});
+
+  factory ListingApiResponse.fromJson(
+      Map<String, dynamic> json, Function fromJson) {
+    return ListingApiResponse(
+      data: json['data'] != null
+          ? (json['data'] as List<T>).map((item) => fromJson(item)).toList()
+              as List<T>
+          : null,
+      message: json['message'],
+      status: json['status'],
+      errorCode: json['errorCode'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'data': data?.map((item) => (item as dynamic).toJson()).toList(),
+      'message': message,
+      'status': status,
+      'errorCode': errorCode,
+    };
+  }
+}

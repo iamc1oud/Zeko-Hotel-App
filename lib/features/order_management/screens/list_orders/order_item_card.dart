@@ -1,28 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeko_hotel_crm/core/date_parser.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders_dto.dart';
+import 'package:zeko_hotel_crm/features/order_management/logic/manage_orders/manage_orders_cubit.dart';
 import 'package:zeko_hotel_crm/features/order_management/logic/order/order_cubit.dart';
+
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/widgets.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 import 'package:zeko_hotel_crm/utils/utils.dart';
 
-class OrderItemCard extends StatelessWidget {
+class OrderItemCard extends StatefulWidget {
   final OrderCategory order;
-  late OrderCubit _orderCubit;
 
   OrderItemCard({super.key, required this.order});
+
+  @override
+  State<OrderItemCard> createState() => _OrderItemCardState();
+}
+
+class _OrderItemCardState extends State<OrderItemCard> {
+  late OrderCubit _orderCubit;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: false,
       create: (context) {
-        _orderCubit = OrderCubit(orderRepository: getIt.get())
-          ..setOrder = order;
+        _orderCubit = OrderCubit(
+            orderRepository: getIt.get(),
+            manageOrdersCubit: context.read<ManageOrdersCubit>())
+          ..setOrder = widget.order;
 
         return _orderCubit;
       },
@@ -33,7 +44,8 @@ class OrderItemCard extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                basicDetail(order.id, order.timeStamp, order.isEscalated),
+                basicDetail(widget.order.id, widget.order.timeStamp,
+                    widget.order.isEscalated),
                 const Divider(),
                 BlocSelector<OrderCubit, OrderState, List<Order$Items>?>(
                   selector: (state) {
@@ -44,9 +56,9 @@ class OrderItemCard extends StatelessWidget {
                   },
                 ),
                 const Divider(),
-                guestDetail(order.category, order.roomNumber),
+                guestDetail(widget.order.category, widget.order.roomNumber),
                 const Divider(),
-                orderConfirmation(order.items),
+                orderConfirmation(widget.order.items),
               ],
             );
           },
@@ -102,6 +114,8 @@ class OrderItemCard extends StatelessWidget {
               const RoundedRectangleBorder(borderRadius: Corners.medBorder),
           value: item.isSelected,
           onChanged: (v) {
+            HapticFeedback.lightImpact();
+
             context.read<OrderCubit>().toggleItemCheck(v!, item);
           },
           contentPadding: EdgeInsets.zero,
@@ -231,7 +245,92 @@ class OrderItemCard extends StatelessWidget {
                     side: BorderSide(color: Colors.red.shade400))),
                 backgroundColor: WidgetStatePropertyAll(
                     Colors.red.shade100.withOpacity(0.3))),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    TextEditingController rejectController =
+                        TextEditingController();
+
+                    final formKey = GlobalKey<FormState>();
+
+                    return BlocProvider.value(
+                      value: _orderCubit,
+                      child: BlocBuilder<OrderCubit, OrderState>(
+                        builder: (context, state) {
+                          return Form(
+                            key: formKey,
+                            child: AlertDialog.adaptive(
+                              title: const Text('Reject Order'),
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextFormField(
+                                    maxLines: 3,
+                                    controller: rejectController,
+                                    autofocus: true,
+                                    validator: (v) {
+                                      if (v!.isEmpty == true) {
+                                        return 'Required';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: const InputDecoration(
+                                      hintText: 'Reason',
+                                    ),
+                                  ),
+                                  Wrap(
+                                    runSpacing: 10,
+                                    spacing: 10,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
+                                    children: ['Out of stock', 'Unavailable']
+                                        .map((v) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          rejectController.text = v;
+                                        },
+                                        child: Chip(
+                                          label: Text(
+                                            v,
+                                            style: textStyles.bodySmall,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      _orderCubit
+                                          .rejectOrder(rejectController.text)
+                                          .then((v) {
+                                        Navigator.pop(context);
+                                      });
+                                    }
+                                  },
+                                  child: const Text(
+                                    'Reject',
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  });
+            },
             label: Text(
               'Reject',
               style: textStyles.bodyMedium,
