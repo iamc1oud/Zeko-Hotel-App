@@ -1,3 +1,5 @@
+import 'package:zeko_hotel_crm/main.dart';
+
 class PendingOrdersDTO {
   final Map<String, List<OrderCategory>> categories;
 
@@ -138,8 +140,10 @@ class ItemDetails {
     return ItemDetails(
       id: json['id'],
       name: json['name'],
-      price: (json['price'] as num).toDouble(),
-      discPrice: (json['discPrice'] as num).toDouble(),
+      price: json['price'] != null ? (json['price'] as num).toDouble() : null,
+      discPrice: json['discPrice'] != null
+          ? (json['discPrice'] as num).toDouble()
+          : null,
       isVeg: json['isVeg'],
       image: json['image'],
       description: json['description'],

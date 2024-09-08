@@ -19,6 +19,8 @@ class OrderCubit extends Cubit<OrderState> {
   set setOrder(OrderCategory order) {
     var items = List<Order$Items>.empty(growable: true);
 
+    logger.d('Logger: ${order.toJson()}');
+
     // Set order items
     for (var i in order.items) {
       items.add(Order$Items(id: i.id, item: i, quantity: i.quantity));

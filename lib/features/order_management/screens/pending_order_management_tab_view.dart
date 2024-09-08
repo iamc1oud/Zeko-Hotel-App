@@ -61,11 +61,6 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
 
                     return CustomScrollView(
                       slivers: [
-                        // NOTE: Can add something interesting here
-                        // const SliverAppBar(
-                        //   title: Text('Pending Orders'),
-                        //   floating: true,
-                        // ),
                         if (orderState.isLoading == false) ...[
                           if (orderState.categories?.isEmpty == true) ...[
                             SliverFillRemaining(
@@ -77,7 +72,7 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
                                   size: AppMediaQuery.size.width * 0.7,
                                 ),
                                 Text(
-                                  'No more pending orders',
+                                  'No more pending orders: ${orderState.categories}',
                                   style: textStyles.bodySmall?.copyWith(
                                       fontFamily:
                                           GoogleFonts.openSans().fontFamily),
@@ -86,7 +81,11 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
                             ))
                           ],
                         ],
-                        SliverList.builder(
+                        SliverList.separated(
+                          separatorBuilder: (_, __) => Divider(
+                            thickness: 10,
+                            color: Colors.grey.shade100,
+                          ),
                           itemBuilder: (context, index) {
                             return OrderItemCard(
                                 order: orderState.categories!.elementAt(index));

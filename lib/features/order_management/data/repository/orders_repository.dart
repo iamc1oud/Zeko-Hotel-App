@@ -36,7 +36,8 @@ class OrderRepositoryImpl implements OrderRepository {
 
       return Right(decoded);
     } catch (e) {
-      return Right(ApiResponse(data: null, message: 'Error'));
+      logger.d("getPendingOrders: $e");
+      return Left(Exception('$e'));
     }
   }
 
