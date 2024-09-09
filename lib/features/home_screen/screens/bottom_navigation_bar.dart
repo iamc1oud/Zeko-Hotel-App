@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final tabs = [
     const AnalyticsTabView(),
     const OrderManagementTabView(),
+    const AppDrawer()
   ];
 
   @override
@@ -45,10 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Spacing.wlg
             ],
           ),
-          drawer: const Drawer(
-                  shape: RoundedRectangleBorder(borderRadius: Corners.lgBorder),
-                  child: AppDrawer())
-              .padding(Paddings.contentPadding),
           body: tabs.elementAt(_currentPage),
           bottomNavigationBar: BottomNavigationBar(
               currentIndex: _currentPage,
@@ -62,7 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 BottomNavigationBarItem(
                     icon: Icon(Icons.analytics_outlined), label: 'Analytics'),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.food_bank_outlined), label: 'Orders')
+                    icon: Icon(Icons.food_bank_outlined), label: 'Orders'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.grid_3x3), label: 'More')
               ]),
         );
       },

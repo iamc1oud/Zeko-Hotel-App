@@ -87,7 +87,7 @@ class _AnalyticsTabViewState extends State<AnalyticsTabView> {
                           ],
                         ),
                         Spacing.hlg,
-                        const AnalyticsFilterSection()
+                        AnalyticsFilterSection()
                             .padding(Paddings.horizontalPadding),
                         Spacing.hlg,
                         const BudgetTrackerSection()

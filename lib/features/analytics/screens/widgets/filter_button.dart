@@ -3,7 +3,9 @@ import 'package:zeko_hotel_crm/utils/extensions/extension.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 class AnalyticsFilterSection extends StatelessWidget {
-  const AnalyticsFilterSection({super.key});
+  AnalyticsFilterSection({super.key});
+
+  final categories = ['Upsell', 'Housekeeping', 'Laundary', 'Sunday Special'];
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class AnalyticsFilterSection extends StatelessWidget {
                   showModalBottomSheet(
                       context: context,
                       builder: (_) {
-                        return Column(
+                        return const Column(
                           children: [Text('Show department names')],
                         );
                       });
@@ -33,13 +35,15 @@ class AnalyticsFilterSection extends StatelessWidget {
         SizedBox(
           height: kMinInteractiveDimension,
           child: ListView.separated(
-              itemCount: 6,
+              itemCount: categories.length,
               separatorBuilder: (context, index) => Spacing.wxs,
               scrollDirection: Axis.horizontal,
               itemBuilder: (_, index) {
                 return Chip(
-                  label: const Text('Sales'),
+                  backgroundColor: Colors.grey.shade200,
+                  label: Text(categories.elementAt(index)),
                   onDeleted: () {},
+                  deleteIconColor: Colors.grey,
                 );
               }),
         ).expanded()
