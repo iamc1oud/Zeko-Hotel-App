@@ -72,7 +72,7 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
                                   size: AppMediaQuery.size.width * 0.7,
                                 ),
                                 Text(
-                                  'No more pending orders: ${orderState.categories}',
+                                  'No more pending orders',
                                   style: textStyles.bodySmall?.copyWith(
                                       fontFamily:
                                           GoogleFonts.openSans().fontFamily),

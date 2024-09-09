@@ -39,25 +39,29 @@ class _OrderItemCardState extends State<OrderItemCard> {
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              basicDetail(widget.order.id, widget.order.timeStamp,
-                  widget.order.isEscalated),
-              const Divider(),
-              BlocSelector<OrderCubit, OrderState, List<Order$Items>?>(
-                selector: (state) {
-                  return state.items;
-                },
-                builder: (context, itemsState) {
-                  return itemListing(itemsState, context);
-                },
-              ),
-              const Divider(),
-              guestDetail(widget.order.category, widget.order.roomNumber),
-              const Divider(),
-              orderConfirmation(widget.order.items),
-            ],
+          return Card(
+            shape: const RoundedRectangleBorder(borderRadius: Corners.lgBorder),
+            color: Colors.yellow.shade50,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                basicDetail(widget.order.id, widget.order.timeStamp,
+                    widget.order.isEscalated),
+                const Divider(),
+                BlocSelector<OrderCubit, OrderState, List<Order$Items>?>(
+                  selector: (state) {
+                    return state.items;
+                  },
+                  builder: (context, itemsState) {
+                    return itemListing(itemsState, context);
+                  },
+                ),
+                const Divider(),
+                guestDetail(widget.order.category, widget.order.roomNumber),
+                const Divider(),
+                orderConfirmation(widget.order.items),
+              ],
+            ).padding(Paddings.contentPadding),
           );
         },
       ).padding(Paddings.contentPadding),
