@@ -1,11 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
-import 'package:zeko_hotel_crm/features/order_management/screens/list_orders/order_item_card.dart';
-import 'package:zeko_hotel_crm/main.dart';
-import 'package:zeko_hotel_crm/shared/widgets/widgets.dart';
-import 'package:zeko_hotel_crm/utils/extensions/extension.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -15,8 +10,6 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
-        var hotelDetails = authState.hotelDetails?.detail;
-
         return Scaffold(
           body: GridView(
             padding: Paddings.contentPadding,

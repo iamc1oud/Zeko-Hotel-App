@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_date_range_picker/flutter_date_range_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zeko_hotel_crm/core/date_parser.dart';
-import 'package:zeko_hotel_crm/features/analytics/data/repository/analytics_repository.dart';
+
 import 'package:zeko_hotel_crm/features/analytics/logic/analytics/analytics_cubit.dart';
 import 'package:zeko_hotel_crm/features/analytics/screens/widgets/analytics_grid.dart';
 import 'package:zeko_hotel_crm/features/analytics/screens/widgets/budget_tracker.dart';
 import 'package:zeko_hotel_crm/features/analytics/screens/widgets/filter_button.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:zeko_hotel_crm/main.dart';
-import 'package:zeko_hotel_crm/utils/extensions/extension.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 class AnalyticsTabView extends StatefulWidget {
@@ -21,8 +20,6 @@ class AnalyticsTabView extends StatefulWidget {
 }
 
 class _AnalyticsTabViewState extends State<AnalyticsTabView> {
-  late AnalyticsCubit _analyticsCubit;
-
   final dateRange = DateRange(
       DateTime.now().subtract(const Duration(seconds: 30)), DateTime.now());
 

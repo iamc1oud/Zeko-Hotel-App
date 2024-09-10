@@ -1,12 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:zeko_hotel_crm/features/analytics/logic/analytics/analytics_cubit.dart';
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/widgets.dart';
 import 'package:zeko_hotel_crm/styles.dart';
-import 'package:zeko_hotel_crm/utils/extensions/extension.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 import 'package:zeko_hotel_crm/utils/utils.dart';
 

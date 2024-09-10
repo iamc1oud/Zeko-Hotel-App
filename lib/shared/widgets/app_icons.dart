@@ -10,8 +10,7 @@ class AppIcon extends StatelessWidget {
   final Color? colorFilter;
 
   const AppIcon(this.icon,
-      {Key? key, this.size = 24, this.color, this.colorFilter})
-      : super(key: key);
+      {super.key, this.size = 24, this.color, this.colorFilter});
   @override
   Widget build(BuildContext context) {
     String i = icon.name.toLowerCase().replaceAll("_", "-");
@@ -25,6 +24,7 @@ class AppIcon extends StatelessWidget {
           path,
           width: size,
           height: size,
+          // ignore: deprecated_member_use
           color: color,
           colorFilter: colorFilter == null
               ? null

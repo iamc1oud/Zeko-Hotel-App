@@ -89,7 +89,7 @@ extension DateParser on String {
 
   String forAPI() {
     String? d = this;
-    if (d == null) {
+    if (d.isEmpty) {
       return 'No date passed';
     }
 
@@ -126,7 +126,7 @@ extension DateParser on String {
 
   int weekday() {
     // Convert the input to uppercase to ensure it matches the map keys
-    String upperDayName = this.toUpperCase();
+    String upperDayName = toUpperCase();
 
     // Use the map to get the corresponding weekday number
     int? weekday = weekdayMap[upperDayName];

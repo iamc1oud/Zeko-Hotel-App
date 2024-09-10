@@ -1,4 +1,3 @@
-import 'package:zeko_hotel_crm/main.dart';
 
 class PendingOrdersDTO {
   final Map<String, List<OrderCategory>> categories;

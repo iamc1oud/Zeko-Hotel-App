@@ -6,12 +6,11 @@ class AnimatedButton extends StatefulWidget {
   final ButtonState? state;
   final Widget child;
 
-  AnimatedButton(
-      {Key? key,
+  const AnimatedButton(
+      {super.key,
       this.onPressed,
       this.state = ButtonState.idle,
-      required this.child})
-      : super(key: key);
+      required this.child});
 
   @override
   _AnimatedButtonState createState() => _AnimatedButtonState();

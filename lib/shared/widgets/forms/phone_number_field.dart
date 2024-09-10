@@ -5,7 +5,7 @@ import 'package:flutter/services.dart'
 import 'package:flutter_svg/svg.dart';
 import 'package:zeko_hotel_crm/assets.dart';
 import 'package:zeko_hotel_crm/main.dart';
-import 'package:zeko_hotel_crm/utils/extensions/extension.dart';
+
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 // Entity
@@ -80,7 +80,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                     _selectedCountry = newValue!;
                   });
                 },
-                underline: SizedBox(),
+                underline: const SizedBox(),
                 padding: Paddings.horizontalPadding,
                 items: _countries
                     .map<DropdownMenuItem<Country>>((Country country) {

@@ -22,7 +22,7 @@ extension TextFormFieldExtension on Widget {
             v,
           ),
           if (isRequired == true) ...[
-            Text(
+            const Text(
               ' *',
             ),
           ]

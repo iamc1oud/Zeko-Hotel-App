@@ -14,8 +14,6 @@ import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scaled_app/scaled_app.dart';
 import 'package:zeko_hotel_crm/core/core.dart';
-import 'package:zeko_hotel_crm/features/analytics/data/repository/analytics_repository.dart';
-import 'package:zeko_hotel_crm/features/analytics/logic/analytics/analytics_cubit.dart';
 import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:zeko_hotel_crm/features/auth/screens/auth_screens.dart';
