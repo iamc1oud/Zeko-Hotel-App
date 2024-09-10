@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropdown_alert/alert_controller.dart';
 import 'package:flutter_dropdown_alert/model/data_alert.dart';
@@ -96,6 +97,11 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   Future getHotelDetails() async {
     var result = await authRepository.hotelDetails();
+
+    // Get token
+    var token = await FirebaseMessaging.instance.getToken();
+
+    logger.d('Token: $token');
 
     // Save currency in prefs.
     getIt

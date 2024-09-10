@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780601981697",
+    "project_id": "zeko-dev",
+    "storage_bucket": "zeko-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780601981697:android:c165cec76fbe1ebed77900",
+        "android_client_info": {
+          "package_name": "com.example.zeko_hotel_crm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBU_JFi3iYGEn6jR7HeZ174CcxNns1FA0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

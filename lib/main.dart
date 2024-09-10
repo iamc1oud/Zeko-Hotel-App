@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +20,7 @@ import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dar
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:zeko_hotel_crm/features/auth/screens/auth_screens.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:zeko_hotel_crm/firebase_options.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 // Global Navigation key
@@ -40,6 +43,17 @@ Future<void> main() async {
       const double widthOfDesign = 375;
       return deviceSize.width / widthOfDesign;
     },
+  );
+
+  // Register firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  /// Update the iOS foreground notification presentation options to allow
+  /// heads up notifications.
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
   );
 
   // Load DI
