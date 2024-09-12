@@ -128,12 +128,16 @@ class _LoginViewState extends State<LoginView>
             ),
           ),
           resizeToAvoidBottomInset: false,
-          bottomSheet: Image.asset(
-            PlatformAssets.appLogo,
-            height: 20,
-            width: AppMediaQuery.size.width,
-            alignment: Alignment.bottomCenter,
-          ).padding(Paddings.verticalPadding)),
+          bottomSheet: SizedBox(
+            height: 40,
+            child: Center(
+              child: Image.asset(
+                PlatformAssets.appLogo,
+                height: 20,
+                alignment: Alignment.center,
+              ).padding(Paddings.verticalPadding),
+            ),
+          )),
     );
   }
 }
@@ -152,7 +156,6 @@ class _LogoWithGradient extends StatelessWidget {
       blendMode: BlendMode.dstIn,
       child: Container(
         height: AppMediaQuery.size.height * 0.3,
-        width: AppMediaQuery.size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,

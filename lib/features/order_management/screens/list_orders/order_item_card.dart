@@ -41,7 +41,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
         builder: (context, state) {
           return Card(
             shape: const RoundedRectangleBorder(borderRadius: Corners.lgBorder),
-            color: Colors.yellow.shade50,
+            color: widget.order.isEscalated == true ? Colors.red.shade50 : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

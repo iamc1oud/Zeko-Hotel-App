@@ -32,10 +32,14 @@ class _AnalyticsTabViewState extends State<AnalyticsTabView> {
           return FutureBuilder(
               future: context.read<AnalyticsCubit>().getAnalytics(),
               builder: (context, snapshot) {
-                return Scaffold(
-                  body: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                return RefreshIndicator.adaptive(
+                  onRefresh: () async {
+                    await context.read<AnalyticsCubit>().getAnalytics();
+                  },
+                  child: Scaffold(
+                    body: ListView(
+                      physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics()),
                       children: [
                         Row(
                           children: [

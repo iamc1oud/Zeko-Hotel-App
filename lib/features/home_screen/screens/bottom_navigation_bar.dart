@@ -81,36 +81,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              '${authState.hotelDetails?.detail?.hotelName}',
-            ),
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Badge.count(
-                      count: 0, child: const Icon(Icons.fastfood_outlined))),
-              Spacing.wlg
-            ],
-          ),
-          body: tabs.elementAt(_currentPage),
-          bottomNavigationBar: BottomNavigationBar(
-              currentIndex: _currentPage,
-              onTap: (page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              showUnselectedLabels: false,
-              items: const [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.analytics_outlined), label: 'Analytics'),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.food_bank_outlined), label: 'Orders'),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.grid_3x3), label: 'More')
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: false,
+              title: Text(
+                '${authState.hotelDetails?.detail?.hotelName}',
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      context.read<AuthCubit>().logout();
+                    },
+                    icon: const Icon(Icons.logout_outlined)),
+              ],
+              bottom: TabBar(indicatorSize: TabBarIndicatorSize.label, tabs: [
+                Tab(
+                  child: Text('Manager Orders'),
+                ),
+                Tab(
+                  child: Text('Order History'),
+                )
               ]),
+            ),
+            body: TabBarView(
+              children: [
+                const OrderManagementTabView(),
+                Text('Upcoming').centerAlign()
+              ],
+            ),
+          ),
         );
       },
     );

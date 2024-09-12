@@ -80,16 +80,15 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
                             ))
                           ],
                         ],
-                        SliverList.separated(
-                          separatorBuilder: (_, __) => Divider(
-                            thickness: 10,
-                            color: Colors.grey.shade100,
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return OrderItemCard(
+                                  order:
+                                      orderState.categories!.elementAt(index));
+                            },
+                            childCount: orderState.categories?.length,
                           ),
-                          itemBuilder: (context, index) {
-                            return OrderItemCard(
-                                order: orderState.categories!.elementAt(index));
-                          },
-                          itemCount: orderState.categories?.length,
                         ),
                       ],
                     );

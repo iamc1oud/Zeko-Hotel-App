@@ -60,6 +60,7 @@ class HttpService {
 
     if (token != null) {
       headers['Authorization'] = 'Bearer $token';
+      logger.d("${headers['Authorization']}");
     }
 
     return headers;
