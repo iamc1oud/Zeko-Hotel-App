@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/orders.dto.dart';
-import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders_dto.dart';
+import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/repository/orders_repository.dart';
 import 'package:zeko_hotel_crm/features/order_management/logic/manage_orders/manage_orders_cubit.dart';
 import 'package:zeko_hotel_crm/main.dart';
@@ -22,8 +22,8 @@ class OrderCubit extends Cubit<OrderState> {
     logger.d('Logger: ${order.toJson()}');
 
     // Set order items
-    for (var i in order.items) {
-      items.add(Order$Items(id: i.id, item: i, quantity: i.quantity));
+    for (var i in order.items!) {
+      items.add(Order$Items(id: i.id!, item: i, quantity: i.quantity!));
     }
 
     emit(state.copyWith(order: order, items: items));

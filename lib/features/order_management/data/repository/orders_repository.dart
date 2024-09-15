@@ -1,14 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:zeko_hotel_crm/core/networking/networking.dart';
 import 'package:zeko_hotel_crm/core/networking/response_api.dart';
+import 'package:zeko_hotel_crm/features/order_management/data/entities/all_orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/orders.dto.dart';
 
-import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders_dto.dart';
+import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/order_management_endpoints.dart';
 import 'package:zeko_hotel_crm/main.dart';
 
 abstract class OrderRepository {
   Future<Either<Exception, ApiResponse<PendingOrdersDTO>>> getPendingOrders();
+  Future<Either<Exception, AllOrders>> getAllOrders(ListOrdersDTO args);
   Future<Either<Exception, ApiResponse<SuccessAcceptOrderDTO>>> acceptOrder(
       AcceptOrderDTO args);
 
@@ -87,6 +89,27 @@ class OrderRepositoryImpl implements OrderRepository {
       return Right(decoded);
     } catch (e) {
       return Right(ApiResponse(data: null, message: 'Error'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, AllOrders>> getAllOrders(ListOrdersDTO args) async {
+    try {
+      logger.i("Payload::: ${args.toJson()}");
+
+      final response = await httpService.post(
+          OrderManagementEndpoints.allOrders,
+          body: args.toJson(),
+          queryParams: {'page': args.page, 'limit': args.limit});
+
+      var decoded = AllOrders.fromJson(response);
+
+      logger.e(decoded.data);
+
+      return Right(decoded);
+    } catch (e) {
+      logger.e('getAllOrders: $e');
+      return Left(Exception('Error loading orders'));
     }
   }
 }

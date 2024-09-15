@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zeko_hotel_crm/core/date_parser.dart';
-import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders_dto.dart';
+import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/logic/manage_orders/manage_orders_cubit.dart';
 import 'package:zeko_hotel_crm/features/order_management/logic/order/order_cubit.dart';
 
@@ -45,8 +45,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                basicDetail(widget.order.id, widget.order.timeStamp,
-                    widget.order.isEscalated),
+                basicDetail(widget.order.id, widget.order.timeStamp!,
+                    widget.order.isEscalated ?? false),
                 const Divider(),
                 BlocSelector<OrderCubit, OrderState, List<Order$Items>?>(
                   selector: (state) {
@@ -57,9 +57,10 @@ class _OrderItemCardState extends State<OrderItemCard> {
                   },
                 ),
                 const Divider(),
-                guestDetail(widget.order.category, widget.order.roomNumber),
+                guestDetail(
+                    widget.order.category ?? '', widget.order.roomNumber ?? ''),
                 const Divider(),
-                orderConfirmation(widget.order.items),
+                orderConfirmation(widget.order.items ?? []),
               ],
             ).padding(Paddings.contentPadding),
           );
@@ -121,7 +122,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
           },
           contentPadding: EdgeInsets.zero,
           title: Text(
-            '${item.item.item.name}',
+            '${item.item.item?.name}',
             style: textStyles.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           dense: true,
@@ -130,9 +131,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (item.item.item.description != null) ...[
+                  if (item.item.item?.description != null) ...[
                     Text(
-                      '${item.item.item.description}',
+                      '${item.item.item?.description}',
                       style: textStyles.bodySmall,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -142,25 +143,25 @@ class _OrderItemCardState extends State<OrderItemCard> {
                   Row(
                     children: [
                       // If discount price is available, then strike the original price.
-                      if (item.item.item.discPrice != null) ...[
+                      if (item.item.item?.discPrice != null) ...[
                         RichText(
                           text: TextSpan(
                               text:
-                                  '$hotelCurrency${item.item.item.discPrice.toString().removeZero()} ',
+                                  '$hotelCurrency${item.item.item?.discPrice.toString().removeZero()} ',
                               style: textStyles.bodyMedium,
                               children: [
                                 TextSpan(
                                     text:
-                                        '$hotelCurrency${item.item.item.price.toString().removeZero()}',
+                                        '$hotelCurrency${item.item.item?.price.toString().removeZero()}',
                                     style: textStyles.bodySmall?.copyWith(
                                         decoration: TextDecoration.lineThrough))
                               ]),
                         ).expanded(),
                       ],
                       // If discount price is not available, then show the original price.
-                      if (item.item.item.discPrice == null) ...[
+                      if (item.item.item?.discPrice == null) ...[
                         Text(
-                          '$hotelCurrency${item.item.item.price.toString().removeZero()}',
+                          '$hotelCurrency${item.item.item?.price.toString().removeZero()}',
                           style: textStyles.bodyMedium,
                         ).expanded(),
                       ],
@@ -178,7 +179,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
               ClipRRect(
                   borderRadius: Corners.lgBorder,
                   child: AppImage(
-                      height: 40, width: 40, src: item.item.item.image)),
+                      height: 40, width: 40, src: item.item.item?.image)),
             ],
           ),
         ).horizontalGapZero();

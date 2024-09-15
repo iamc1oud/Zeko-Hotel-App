@@ -44,9 +44,10 @@ class ListingApiResponse<T> {
       Map<String, dynamic> json, Function fromJson) {
     return ListingApiResponse(
       data: json['data'] != null
-          ? (json['data'] as List<T>).map((item) => fromJson(item)).toList()
-              as List<T>
-          : null,
+          ? (json['data'] as List<dynamic>)
+              .map((item) => fromJson(item))
+              .toList() as List<T>
+          : [],
       message: json['message'],
       status: json['status'],
       errorCode: json['errorCode'],

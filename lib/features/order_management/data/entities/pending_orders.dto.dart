@@ -1,11 +1,10 @@
-
 class PendingOrdersDTO {
-  final Map<String, List<OrderCategory>> categories;
+  Map<String, List<OrderCategory>> categories;
 
   PendingOrdersDTO({required this.categories});
 
   factory PendingOrdersDTO.fromJson(Map<String, dynamic> json) {
-    final Map<String, List<OrderCategory>> parsedCategories = {};
+    Map<String, List<OrderCategory>> parsedCategories = {};
 
     json.forEach((key, value) {
       if (value is List) {
@@ -20,7 +19,7 @@ class PendingOrdersDTO {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {};
+    Map<String, dynamic> json = {};
     categories.forEach((key, value) {
       json[key] = value.map((item) => item.toJson()).toList();
     });
@@ -29,28 +28,28 @@ class PendingOrdersDTO {
 }
 
 class OrderCategory {
-  final int id;
-  final String phoneNumber;
-  final int reservationId;
-  final String roomNumber;
-  final String roomType;
-  final String comment;
-  final String category;
-  final bool isEscalated;
-  final String timeStamp;
-  final List<OrderItem> items;
+  int id;
+  String? phoneNumber;
+  int? reservationId;
+  String? roomNumber;
+  String? roomType;
+  String? comment;
+  String? category;
+  bool? isEscalated;
+  String? timeStamp;
+  List<OrderItem>? items;
 
   OrderCategory({
     required this.id,
-    required this.phoneNumber,
-    required this.reservationId,
-    required this.roomNumber,
-    required this.roomType,
-    required this.comment,
-    required this.category,
-    required this.isEscalated,
-    required this.timeStamp,
-    required this.items,
+    this.phoneNumber,
+    this.reservationId,
+    this.roomNumber,
+    this.roomType,
+    this.comment,
+    this.category,
+    this.isEscalated,
+    this.timeStamp,
+    this.items,
   });
 
   factory OrderCategory.fromJson(Map<String, dynamic> json) {
@@ -64,7 +63,9 @@ class OrderCategory {
       category: json['category'],
       isEscalated: json['isEscalated'],
       timeStamp: json['timeStamp'],
-      items: (json['items'] as List).map((i) => OrderItem.fromJson(i)).toList(),
+      items: json['items'] != null
+          ? (json['items'] as List).map((i) => OrderItem.fromJson(i)).toList()
+          : [],
     );
   }
 
@@ -79,28 +80,28 @@ class OrderCategory {
       'category': category,
       'isEscalated': isEscalated,
       'timeStamp': timeStamp,
-      'items': items.map((i) => i.toJson()).toList(),
+      'items': items?.map((i) => i.toJson()).toList(),
     };
   }
 }
 
 class OrderItem {
-  final int id;
-  final ItemDetails item;
-  final int quantity;
-  final bool isAccepted;
+  int? id;
+  ItemDetails? item;
+  int? quantity;
+  bool? isAccepted;
 
   OrderItem({
-    required this.id,
-    required this.item,
-    required this.quantity,
-    required this.isAccepted,
+    this.id,
+    this.item,
+    this.quantity,
+    this.isAccepted,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
       id: json['id'],
-      item: ItemDetails.fromJson(json['item']),
+      item: json['item'] != null ? ItemDetails.fromJson(json['item']) : null,
       quantity: json['quantity'],
       isAccepted: json['isAccepted'],
     );
@@ -109,7 +110,7 @@ class OrderItem {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'item': item.toJson(),
+      'item': item?.toJson(),
       'quantity': quantity,
       'isAccepted': isAccepted,
     };
@@ -117,20 +118,20 @@ class OrderItem {
 }
 
 class ItemDetails {
-  final int id;
-  final String? name;
-  final double? price;
-  final double? discPrice;
-  final bool? isVeg;
-  final String? image;
-  final String? description;
+  int? id;
+  String? name;
+  double? price;
+  double? discPrice;
+  bool? isVeg;
+  String? image;
+  String? description;
 
   ItemDetails({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.discPrice,
-    required this.isVeg,
+    this.id,
+    this.name,
+    this.price,
+    this.discPrice,
+    this.isVeg,
     this.image,
     this.description,
   });

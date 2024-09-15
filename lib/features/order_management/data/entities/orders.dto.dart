@@ -41,3 +41,26 @@ class SuccessAcceptOrderDTO extends Equatable {
   @override
   List<Object?> get props => [status];
 }
+
+class ListOrdersDTO extends Equatable {
+  final DateTime startTime;
+  final DateTime endTime;
+  final String limit;
+  final String page;
+
+  const ListOrdersDTO(
+      {required this.limit,
+      required this.page,
+      required this.startTime,
+      required this.endTime});
+
+  @override
+  List<Object?> get props => [startTime, endTime];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'start_time': startTime.toIso8601String(),
+      'end_time': endTime.toIso8601String()
+    };
+  }
+}

@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:zeko_hotel_crm/features/analytics/screens/analytics_screens.dart';
 import 'package:zeko_hotel_crm/features/home_screen/screens/home_page_drawer.dart';
 import 'package:zeko_hotel_crm/features/order_management/screens/order_management_screens.dart';
+import 'package:zeko_hotel_crm/features/order_management/screens/orders_history/order_history_list_view.dart';
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
@@ -96,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     icon: const Icon(Icons.logout_outlined)),
               ],
-              bottom: TabBar(indicatorSize: TabBarIndicatorSize.label, tabs: [
+              bottom:
+                  const TabBar(indicatorSize: TabBarIndicatorSize.label, tabs: [
                 Tab(
                   child: Text('Manager Orders'),
                 ),
@@ -105,11 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ]),
             ),
-            body: TabBarView(
-              children: [
-                const OrderManagementTabView(),
-                Text('Upcoming').centerAlign()
-              ],
+            body: const TabBarView(
+              children: [OrderManagementTabView(), OrderHistoryListView()],
             ),
           ),
         );
