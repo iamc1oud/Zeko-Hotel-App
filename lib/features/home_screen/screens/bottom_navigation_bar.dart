@@ -49,10 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: 'launch_background',
                     colorized: true,
                     actions: [
-                  const AndroidNotificationAction('accept_order', 'Accept',
-                      showsUserInterface: true, titleColor: Colors.green),
-                  const AndroidNotificationAction('reject_order', 'Reject',
-                      showsUserInterface: true)
+                  // const AndroidNotificationAction('accept_order', 'Accept',
+                  //     showsUserInterface: true, titleColor: Colors.green),
+                  // const AndroidNotificationAction('reject_order', 'Reject',
+                  //     showsUserInterface: true)
                 ])));
       }
     });

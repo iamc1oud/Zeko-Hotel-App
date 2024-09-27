@@ -40,36 +40,49 @@ class _OrderItemCardState extends State<OrderItemCard> {
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
           return Card(
-            shape: const RoundedRectangleBorder(borderRadius: Corners.lgBorder),
-            color: widget.order.isEscalated == true ? Colors.red.shade50 : null,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                basicDetail(widget.order.id, widget.order.timeStamp!,
-                    widget.order.isEscalated ?? false),
-                const Divider(),
-                BlocSelector<OrderCubit, OrderState, List<Order$Items>?>(
-                  selector: (state) {
-                    return state.items;
-                  },
-                  builder: (context, itemsState) {
-                    return itemListing(itemsState, context);
-                  },
-                ),
-                const Divider(),
-                guestDetail(
-                    widget.order.category ?? '', widget.order.roomNumber ?? ''),
-                const Divider(),
-                orderConfirmation(widget.order.items ?? []),
-              ],
-            ).padding(Paddings.contentPadding),
-          );
+              clipBehavior: Clip.antiAlias,
+              shape:
+                  const RoundedRectangleBorder(borderRadius: Corners.lgBorder),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    padding: Paddings.contentPadding,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      color:
+                          widget.order.isEscalated == true ? Colors.red : null,
+                    ),
+                    child: basicDetail(widget.order.id, widget.order.timeStamp!,
+                        widget.order.isEscalated ?? false),
+                  ),
+                  BlocSelector<OrderCubit, OrderState, List<Order$Items>?>(
+                    selector: (state) {
+                      return state.items;
+                    },
+                    builder: (context, itemsState) {
+                      return itemListing(itemsState, context)
+                          .padding(Paddings.horizontalPadding);
+                    },
+                  ),
+                  const Divider(),
+                  guestDetail(widget.order.category ?? '',
+                          widget.order.roomNumber ?? '')
+                      .padding(Paddings.horizontalPadding),
+                  const Divider(),
+                  orderConfirmation(widget.order.items ?? [])
+                      .padding(Paddings.horizontalPadding),
+                  Spacing.hmed,
+                ],
+              ));
         },
       ).padding(Paddings.contentPadding),
     );
   }
 
   Widget basicDetail(int id, String timeStamp, bool isEscalated) {
+    var color = isEscalated == true ? Colors.white : null;
+
     return Row(
       children: [
         Column(
@@ -77,13 +90,13 @@ class _OrderItemCardState extends State<OrderItemCard> {
           children: [
             Text(
               'Order #$id',
-              style:
-                  textStyles.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: textStyles.bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold, color: color),
             ),
             Spacing.hxs,
             Text(
               timeStamp.toCustom('EEE, MMM dd, yyyy hh:mm a'),
-              style: textStyles.bodySmall,
+              style: textStyles.bodySmall?.copyWith(color: color),
             ),
           ],
         ).expanded(),
@@ -91,7 +104,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
           Center(
               child: const Icon(
             Icons.notification_important_outlined,
-            color: Colors.red,
+            color: Colors.white,
           )
                   .animate(
                     onPlay: (controller) => controller.repeat(),

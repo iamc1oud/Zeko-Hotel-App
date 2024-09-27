@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zeko_hotel_crm/assets.dart';
 import 'package:zeko_hotel_crm/core/navigation/app_navigation.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/buttons/animated_button.dart';
 import 'package:zeko_hotel_crm/shared/widgets/dismiss_keyboard.dart';
 import 'package:zeko_hotel_crm/shared/widgets/forms/phone_number_field.dart';
+import 'package:zeko_hotel_crm/utils/alerts.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 class LoginView extends StatefulWidget {
@@ -75,9 +77,15 @@ class _LoginViewState extends State<LoginView>
                       key: authCubit.loginFormKey,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _LogoWithGradient(),
+                          // _LogoWithGradient(),
+                          SizedBox(height: AppMediaQuery.size.height * 0.2),
+                          Image.asset(
+                            PlatformAssets.appLogo,
+                            height: AppMediaQuery.size.width * 0.1,
+                            alignment: Alignment.center,
+                          ).padding(Paddings.verticalPadding),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -111,12 +119,15 @@ class _LoginViewState extends State<LoginView>
                                   'Login',
                                 ),
                               ),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Forgot password?',
-                                    style: textStyles.bodySmall,
-                                  ))
+                              // TODO: Implement this
+                              // TextButton(
+                              //     onPressed: () {
+
+                              //     },
+                              //     child: Text(
+                              //       'Forgot password?',
+                              //       style: textStyles.bodySmall,
+                              //     ))
                             ],
                           ).padding(Paddings.contentPadding),
                         ],
@@ -129,13 +140,28 @@ class _LoginViewState extends State<LoginView>
           ),
           resizeToAvoidBottomInset: false,
           bottomSheet: SizedBox(
-            height: 40,
+            height: 50,
             child: Center(
-              child: Image.asset(
-                PlatformAssets.appLogo,
-                height: 20,
-                alignment: Alignment.center,
-              ).padding(Paddings.verticalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: 'with ♥️\n',
+                        style: textStyles.bodyMedium?.copyWith(
+                          fontFamily: GoogleFonts.dancingScript().fontFamily,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'Made In India',
+                            style: textStyles.bodySmall?.copyWith(
+                                fontFamily: GoogleFonts.exo2().fontFamily),
+                          )
+                        ],
+                      )),
+                ],
+              ),
             ),
           )),
     );

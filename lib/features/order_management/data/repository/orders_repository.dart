@@ -102,9 +102,9 @@ class OrderRepositoryImpl implements OrderRepository {
           body: args.toJson(),
           queryParams: {'page': args.page, 'limit': args.limit});
 
-      var decoded = AllOrders.fromJson(response);
+      logger.d(response);
 
-      logger.e(decoded.data);
+      var decoded = AllOrders.fromJson(response);
 
       return Right(decoded);
     } catch (e) {

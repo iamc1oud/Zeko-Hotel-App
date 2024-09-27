@@ -36,14 +36,14 @@ class _OrderHistoryListViewState extends State<OrderHistoryListView> {
     try {
       var newItems = await _orderHistoryCubit.getAllOrders(pageKey);
       newItems.fold((l) {
-        logger.e("Error paginate: $l");
+        _pagingController.error = l;
       }, (r) {
         final isLastPage = r.data!.length < PAGE_LIMIT;
 
         if (isLastPage) {
           _pagingController.appendLastPage(r.data!);
         } else {
-          final nextPageKey = pageKey + r.data!.length;
+          final nextPageKey = pageKey + 1;
           _pagingController.appendPage(r.data!, nextPageKey.toInt());
         }
       });
@@ -137,14 +137,6 @@ class _HistoryCard extends StatelessWidget {
             ],
           ),
           Spacing.hxs,
-          if (item.isEscalated == true) ...[
-            Chip(
-              label: Text(
-                'Delayed Order Accepted ${item.acceptedBy}',
-                style: textStyles.labelSmall,
-              ),
-            )
-          ],
         ],
       ).padding(Paddings.contentPadding),
     );

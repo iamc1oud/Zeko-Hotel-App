@@ -19,7 +19,7 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
         limit: PAGE_LIMIT.toString(),
         page: pageKey.toString(),
         startTime: DateTime.now().subtract(const Duration(days: 7)),
-        endTime: DateTime.now()));
+        endTime: DateTime.now().add(const Duration(days: 1))));
 
     return order;
   }

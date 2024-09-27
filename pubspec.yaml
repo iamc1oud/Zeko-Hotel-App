@@ -57,11 +57,23 @@ dependencies:
   bloc: ^8.1.4
   permission_handler: ^11.3.1
 
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  # Run command: flutter pub run flutter_launcher_icons
+  flutter_launcher_icons: ^0.13.1
+  rename_app: ^1.6.1 # View more in Readme
   flutter_lints: ^4.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/app/app_logo.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "assets/app/purple_bg.png"
+  adaptive_icon_foreground: "assets/app/app_logo_v1.png"
 
 flutter:
   generate: true
@@ -73,3 +85,4 @@ flutter:
     - assets/lottie/
     - assets/icons/
     - assets/country-code-with-flag.json
+    - assets/app/

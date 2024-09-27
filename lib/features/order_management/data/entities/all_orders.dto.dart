@@ -14,8 +14,6 @@ class AllOrders {
       json['data'].forEach((v) {
         data!.add(OrderPlaced.fromJson(v));
       });
-
-      json['data'] = [];
     }
     message = json['message'];
     status = json['status'];
@@ -200,9 +198,9 @@ class Items {
     if (item != null) {
       data['item'] = item!.toJson();
     }
-    // if (addonitem != null) {
-    //   data['addonitem'] = addonitem!.map((v) => v.toJson()).toList();
-    // }
+    if (addonitem != null) {
+      data['addonitem'] = addonitem!.map((v) => v.toJson()).toList();
+    }
     data['quantity'] = quantity;
     data['isAccepted'] = isAccepted;
     data['housekeepingItem'] = housekeepingItem;
