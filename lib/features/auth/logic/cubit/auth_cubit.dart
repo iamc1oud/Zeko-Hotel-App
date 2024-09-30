@@ -118,6 +118,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   void logout() {
     try {
+      phoneNumberController.clear();
+      passwordController.clear();
       emit(state.copyWith(isSignedIn: false, isSuperuser: false));
       AppNavigator.slideReplacement(const LoginView());
     } catch (e) {

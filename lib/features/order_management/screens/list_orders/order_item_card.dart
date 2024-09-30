@@ -10,6 +10,7 @@ import 'package:zeko_hotel_crm/features/order_management/logic/order/order_cubit
 
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/widgets.dart';
+import 'package:zeko_hotel_crm/styles.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 import 'package:zeko_hotel_crm/utils/utils.dart';
 
@@ -39,7 +40,12 @@ class _OrderItemCardState extends State<OrderItemCard> {
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
+          var isDiscounted =
+              widget.order.items?.any((e) => e.item?.discPrice != null) ??
+                  false;
+
           return Card(
+              color: isDiscounted ? kDiscountOrderBackground : null,
               clipBehavior: Clip.antiAlias,
               shape:
                   const RoundedRectangleBorder(borderRadius: Corners.lgBorder),
@@ -144,15 +150,6 @@ class _OrderItemCardState extends State<OrderItemCard> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (item.item.item?.description != null) ...[
-                    Text(
-                      '${item.item.item?.description}',
-                      style: textStyles.bodySmall,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
-                  Spacing.hsm,
                   Row(
                     children: [
                       // If discount price is available, then strike the original price.
