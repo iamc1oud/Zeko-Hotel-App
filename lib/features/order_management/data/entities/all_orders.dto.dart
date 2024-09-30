@@ -94,8 +94,6 @@ class OrderPlaced {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-        logger.d(json['id']);
-
         items?.add(Items.fromJson(v));
       });
     }

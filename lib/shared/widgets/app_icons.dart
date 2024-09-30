@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-enum AppIcons { orderFood, revenue, trend, chat, hourglass }
+enum AppIcons { orderFood, revenue, trend, chat, hourglass, noorder }
 
 class AppIcon extends StatelessWidget {
   final AppIcons icon;

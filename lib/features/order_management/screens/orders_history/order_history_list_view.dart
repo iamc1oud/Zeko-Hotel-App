@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:zeko_hotel_crm/core/date_parser.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/all_orders.dto.dart'
     as allOrder;
 import 'package:zeko_hotel_crm/features/order_management/logic/order_history/order_history_cubit.dart';
 import 'package:zeko_hotel_crm/main.dart';
+import 'package:zeko_hotel_crm/shared/widgets/app_icons.dart';
 import 'package:zeko_hotel_crm/shared/widgets/app_image.dart';
 import 'package:zeko_hotel_crm/utils/constants.dart';
 import 'package:zeko_hotel_crm/utils/curreny.dart';
@@ -61,10 +63,59 @@ class _OrderHistoryListViewState extends State<OrderHistoryListView> {
         return _orderHistoryCubit;
       },
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            BlocBuilder<OrderHistoryCubit, OrderHistoryState>(
+              builder: (context, state) {
+                return FilledButton.icon(
+                  onPressed: () async {
+                    var selectedRange = await showDateRangePicker(
+                      context: context,
+                      firstDate:
+                          DateTime.now().subtract(const Duration(days: 10000)),
+                      lastDate: DateTime.now().add(const Duration(days: 10000)),
+                      initialDateRange: DateTimeRange(
+                          start: state.startTime!, end: state.endTime!),
+                      currentDate: DateTime.now(),
+                    );
+
+                    if (selectedRange != null) {
+                      context
+                          .read<OrderHistoryCubit>()
+                          .setDateRange(dateRange: selectedRange);
+                      // Reload controller
+                      _pagingController.refresh();
+                    }
+                  },
+                  icon: const Icon(Icons.calendar_month_sharp),
+                  label: Text(
+                    '${state.endTime!.toString().toddMMMyyyy()} - ${state.startTime!.toString().toddMMMyyyy()}',
+                    style: textStyles.bodySmall?.copyWith(color: Colors.white),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
         body: PagedListView<int, allOrder.OrderPlaced>(
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<allOrder.OrderPlaced>(
-              newPageErrorIndicatorBuilder: (context) {
+              noItemsFoundIndicatorBuilder: (context) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppIcon(
+                  AppIcons.noorder,
+                  size: AppMediaQuery.size.width * 0.7,
+                ),
+                Text(
+                  'No orders found',
+                  style: textStyles.bodySmall
+                      ?.copyWith(fontFamily: GoogleFonts.openSans().fontFamily),
+                )
+              ],
+            );
+          }, newPageErrorIndicatorBuilder: (context) {
             return Text('Error');
           }, itemBuilder: (context, item, index) {
             return _HistoryCard(item);
@@ -168,15 +219,6 @@ class _HistoryCard extends StatelessWidget {
                     maxLines: 1,
                   ),
                 ],
-                if (item.item?.description != null) ...[
-                  Text(
-                    '${item.item?.description}',
-                    style: textStyles.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ],
-                Spacing.hsm,
               ],
             ).expanded(),
             Text('x${item.quantity}'),
