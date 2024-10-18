@@ -67,8 +67,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
       logger.d(result);
 
       if (result.data!.isPasswordCorrect == false) {
-        AlertController.show('Invalid password',
-            '${result.data?.isPasswordCorrect.toString()}', TypeAlert.error);
+        AlertController.show('Invalid password', '', TypeAlert.error);
         setLoadingStatus = ButtonState.idle;
       } else {
         var accessToken = result.data!.token!.access!;
@@ -103,7 +102,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
     var token = await FirebaseMessaging.instance.getToken();
 
     if (token != null) {
-      logger.d("FCM Token: $token");
+      logger.d("Updated FCM Token: $token");
       var response = await authRepository.updateFCMToken(token: token);
       logger.d(response);
     }

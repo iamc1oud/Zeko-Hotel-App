@@ -162,7 +162,7 @@ class Items {
   List<Item>? addonitem;
   int? quantity;
   bool? isAccepted;
-  Item? housekeepingItem;
+  HousekeepingItem? housekeepingItem;
   Item? upsellItem;
 
   Items(
@@ -185,7 +185,9 @@ class Items {
     }
     quantity = json['quantity'];
     isAccepted = json['isAccepted'];
-    housekeepingItem = json['housekeepingItem'];
+    housekeepingItem = json['housekeepingItem'] != null
+        ? HousekeepingItem.fromJson(json['housekeepingItem'])
+        : null;
     upsellItem =
         json['upsellItem'] != null ? Item.fromJson(json['upsellItem']) : null;
   }
@@ -210,8 +212,8 @@ class Items {
 class Item {
   int? id;
   String? name;
-  double? price;
-  double? discPrice;
+  num? price;
+  num? discPrice;
   bool? isVeg;
   String? image;
   String? description;
@@ -244,6 +246,28 @@ class Item {
     data['isVeg'] = isVeg;
     data['image'] = image;
     data['description'] = description;
+    return data;
+  }
+}
+
+class HousekeepingItem {
+  int? id;
+  String? name;
+  String? photo;
+
+  HousekeepingItem({this.id, this.name, this.photo});
+
+  HousekeepingItem.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    photo = json['photo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['photo'] = photo;
     return data;
   }
 }

@@ -116,7 +116,7 @@ class _OrderHistoryListViewState extends State<OrderHistoryListView> {
               ],
             );
           }, newPageErrorIndicatorBuilder: (context) {
-            return Text('Error');
+            return const Text('Error');
           }, itemBuilder: (context, item, index) {
             return _HistoryCard(item);
           }),
@@ -214,6 +214,14 @@ class _HistoryCard extends StatelessWidget {
                 if (item.item?.name != null) ...[
                   Text(
                     '${item.item?.name}',
+                    style: textStyles.bodyMedium,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+                if (item.housekeepingItem?.name != null) ...[
+                  Text(
+                    '${item.housekeepingItem?.name}',
                     style: textStyles.bodyMedium,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
