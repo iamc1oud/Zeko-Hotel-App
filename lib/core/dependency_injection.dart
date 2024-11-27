@@ -10,7 +10,7 @@ Future injecteDependencies() async {
 
   // Add dependencies here
   // getIt.registerSingleton(HttpService(baseUrl: "http://192.168.1.10:8000"));
-  // getIt.registerSingleton(HttpService(baseUrl: "https://dev.zeko.tech"));
+//   getIt.registerSingleton(HttpService(baseUrl: "https://dev.zeko.tech"));
   getIt.registerSingleton(HttpService(baseUrl: "https://apis.zeko.tech"));
 
   // Repositories

@@ -99,6 +99,7 @@ void showFlutterNotification(RemoteMessage message) {
         android: AndroidNotificationDetails(
           channel.id,
           channel.name,
+
           channelDescription: channel.description,
           // TODO add a proper drawable resource to android, for now using
           //      one that already exists in example app.
