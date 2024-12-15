@@ -4,10 +4,13 @@ import 'package:zeko_hotel_crm/features/auth/data/dtos/hotel_details_response_dt
 import 'package:zeko_hotel_crm/features/auth/data/dtos/staff_login_request_dto.dart';
 import 'package:zeko_hotel_crm/features/auth/data/dtos/staff_login_response_dto.dart';
 import 'package:zeko_hotel_crm/features/auth/data/endpoints.dart';
+import 'package:zeko_hotel_crm/main.dart';
 
 abstract class AuthRepository {
   Future<ApiResponse<StaffLoginDto>> staffLogin(
       {required String phoneNumber, required String password});
+
+  Future<ApiResponse> updateFCMToken({required String token});
 
   Future<HotelDetailsDTO> hotelDetails();
 }
@@ -43,6 +46,22 @@ class AuthRepositoryImpl implements AuthRepository {
       return HotelDetailsDTO.fromJson(response);
     } catch (e) {
       return HotelDetailsDTO(detail: null);
+    }
+  }
+
+  @override
+  Future<ApiResponse> updateFCMToken({required String token}) async {
+    try {
+      final response = await httpService.post(
+        AuthEndpoints.fcm,
+        body: {"token": token},
+      );
+
+      logger.d(response);
+
+      return ApiResponse.fromJson(response, null);
+    } catch (e) {
+      return ApiResponse();
     }
   }
 }

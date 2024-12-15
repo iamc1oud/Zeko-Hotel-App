@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/utils/extensions/design_constants.dart';
 
 extension TextFormFieldExtension on Widget {
@@ -20,9 +21,10 @@ extension TextFormFieldExtension on Widget {
         children: [
           Text(
             v,
+            style: textStyles.bodySmall,
           ),
           if (isRequired == true) ...[
-            Text(
+            const Text(
               ' *',
             ),
           ]

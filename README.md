@@ -2,15 +2,11 @@
 
 A new Flutter project.
 
-## Getting Started
+## Build Runner
+### Rename App
 
-This project is a starting point for a Flutter application.
+All: `dart run rename_app:main all="App Name"`
 
-A few resources to get you started if this is your first Flutter project:
+Android: `dart run rename_app:main android="Android App"`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Only IOS: `dart run rename_app:main ios="IOS App"`

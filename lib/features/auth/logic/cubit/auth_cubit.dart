@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropdown_alert/alert_controller.dart';
 import 'package:flutter_dropdown_alert/model/data_alert.dart';
@@ -7,8 +8,8 @@ import 'package:zeko_hotel_crm/core/navigation/app_navigation.dart';
 import 'package:zeko_hotel_crm/core/storage/storage.dart';
 import 'package:zeko_hotel_crm/features/auth/data/dtos/hotel_details_response_dto.dart';
 import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dart';
+import 'package:zeko_hotel_crm/features/auth/screens/login_view.dart';
 import 'package:zeko_hotel_crm/features/home_screen/screens/bottom_navigation_bar.dart';
-import 'package:zeko_hotel_crm/features/order_management/screens/order_management_screens.dart';
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/shared/widgets/widgets.dart';
 
@@ -34,12 +35,6 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   set setLoadingStatus(ButtonState v) {
     emit(state.copyWith(loadingState: v));
-  }
-
-  @override
-  Future<void> clear() {
-    Navigator.of(navigatorKey.currentContext!).popUntil((v) => true);
-    return super.clear();
   }
 
   @override
@@ -72,8 +67,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
       logger.d(result);
 
       if (result.data!.isPasswordCorrect == false) {
-        AlertController.show('Invalid password',
-            '${result.data?.isPasswordCorrect.toString()}', TypeAlert.error);
+        AlertController.show('Invalid password', '', TypeAlert.error);
         setLoadingStatus = ButtonState.idle;
       } else {
         var accessToken = result.data!.token!.access!;
@@ -82,6 +76,14 @@ class AuthCubit extends HydratedCubit<AuthState> {
         await getIt
             .get<SharedPreferences>()
             .setString(PrefKeys.token.name, accessToken);
+
+        // Get token
+        var token = await FirebaseMessaging.instance.getToken();
+
+        if (token != null) {
+          logger.d("FCM Token: $token");
+          await authRepository.updateFCMToken(token: token);
+        }
 
         emit(state.copyWith(
           isSignedIn: true,
@@ -97,11 +99,31 @@ class AuthCubit extends HydratedCubit<AuthState> {
   Future getHotelDetails() async {
     var result = await authRepository.hotelDetails();
 
+    var token = await FirebaseMessaging.instance.getToken();
+
+    if (token != null) {
+      logger.d("Updated FCM Token: $token");
+      var response = await authRepository.updateFCMToken(token: token);
+      logger.d(response);
+    }
+
     // Save currency in prefs.
     getIt
         .get<SharedPreferences>()
         .setString(PrefKeys.curreny.name, result.detail!.currency!);
 
     emit(state.copyWith(hotelDetails: result));
+  }
+
+  void logout() {
+    try {
+      phoneNumberController.clear();
+      passwordController.clear();
+      emit(state.copyWith(isSignedIn: false, isSuperuser: false));
+      AppNavigator.slideReplacement(const LoginView());
+    } catch (e) {
+      logger.e('Error popping: $e');
+    }
+    clear();
   }
 }

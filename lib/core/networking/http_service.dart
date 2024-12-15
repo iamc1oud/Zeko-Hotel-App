@@ -17,11 +17,12 @@ class HttpService {
   Future<dynamic> post(
     String endpoint, {
     Map<String, dynamic>? body,
+    Map<String, dynamic>? queryParams,
     Map<String, dynamic>? headers,
   }) async {
     var token = getIt.get<SharedPreferences>().getString(PrefKeys.token.name);
 
-    final url = buildUrl(endpoint: endpoint);
+    final url = buildUrl(endpoint: endpoint, queryParams: queryParams);
 
     Map<String, dynamic> requestHeaders =
         buildHeaders(token: token) as Map<String, String>;
@@ -60,6 +61,7 @@ class HttpService {
 
     if (token != null) {
       headers['Authorization'] = 'Bearer $token';
+      // logger.d("${headers['Authorization']}");
     }
 
     return headers;

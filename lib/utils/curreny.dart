@@ -5,7 +5,7 @@ import 'package:zeko_hotel_crm/main.dart';
 
 String get hotelCurrency {
   var currenyName =
-      getIt.get<SharedPreferences>().getString(PrefKeys.curreny.name)!;
+      getIt.get<SharedPreferences>().getString(PrefKeys.curreny.name);
 
   var format = NumberFormat.simpleCurrency(name: currenyName);
 

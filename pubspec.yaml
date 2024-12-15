@@ -41,12 +41,39 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_animate: ^4.5.0
   fluttericon: ^2.0.0
+  equatable: ^2.0.5
+  fl_chart: ^0.69.0
+  flutter_date_range_picker: ^0.1.1
+  auto_size_text: ^3.0.0
+  infinite_scroll_pagination: ^4.0.0
+  
+  # Firebase Products
+  firebase_messaging: ^14.7.10
+  firebase_core: ^2.24.2
+  firebase_analytics: ^10.8.0
+
+  # Notifications
+  flutter_local_notifications: ^17.2.2
+  bloc: ^8.1.4
+  permission_handler: ^11.3.1
+
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  # Run command: flutter pub run flutter_launcher_icons
+  flutter_launcher_icons: ^0.13.1
+  rename_app: ^1.6.1 # View more in Readme
   flutter_lints: ^4.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/app/app_logo.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "assets/app/purple_bg.png"
+  adaptive_icon_foreground: "assets/app/app_logo_v1.png"
 
 flutter:
   generate: true
@@ -56,4 +83,6 @@ flutter:
   assets:
     - assets/platform/
     - assets/lottie/
+    - assets/icons/
     - assets/country-code-with-flag.json
+    - assets/app/
