@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropdown_alert/alert_controller.dart';
@@ -82,7 +85,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
         if (token != null) {
           logger.d("FCM Token: $token");
-          await authRepository.updateFCMToken(token: token);
+          var deviceId = await getDeviceId();
+          await authRepository.updateFCMToken(token: token, deviceId: deviceId);
         }
 
         emit(state.copyWith(
@@ -103,7 +107,9 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
     if (token != null) {
       logger.d("Updated FCM Token: $token");
-      var response = await authRepository.updateFCMToken(token: token);
+      var deviceId = await getDeviceId();
+      var response =
+          await authRepository.updateFCMToken(token: token, deviceId: deviceId);
       logger.d(response);
     }
 
@@ -113,6 +119,26 @@ class AuthCubit extends HydratedCubit<AuthState> {
         .setString(PrefKeys.curreny.name, result.detail!.currency!);
 
     emit(state.copyWith(hotelDetails: result));
+  }
+
+  Future<String> getDeviceId() async {
+    late final AndroidDeviceInfo androidDevice;
+    late final IosDeviceInfo iosDevice;
+
+    // Get device info.
+    final deviceInfo = DeviceInfoPlugin();
+    String? deviceId;
+
+    if (Platform.isAndroid) {
+      androidDevice = await deviceInfo.androidInfo;
+      deviceId = androidDevice.id;
+    } else if (Platform.isIOS) {
+      iosDevice = await deviceInfo.iosInfo;
+      deviceId = iosDevice.identifierForVendor;
+    }
+
+    logger.i("Unique device ID: $deviceId");
+    return deviceId ?? '';
   }
 
   void logout() {

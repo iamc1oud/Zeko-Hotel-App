@@ -10,7 +10,8 @@ abstract class AuthRepository {
   Future<ApiResponse<StaffLoginDto>> staffLogin(
       {required String phoneNumber, required String password});
 
-  Future<ApiResponse> updateFCMToken({required String token});
+  Future<ApiResponse> updateFCMToken(
+      {required String token, required String deviceId});
 
   Future<HotelDetailsDTO> hotelDetails();
 }
@@ -50,14 +51,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<ApiResponse> updateFCMToken({required String token}) async {
+  Future<ApiResponse> updateFCMToken(
+      {required String token, required String deviceId}) async {
     try {
       final response = await httpService.post(
         AuthEndpoints.fcm,
-        body: {"token": token},
+        body: {"token": token, "deviceId": deviceId},
       );
-
-      logger.d(response);
 
       return ApiResponse.fromJson(response, null);
     } catch (e) {
