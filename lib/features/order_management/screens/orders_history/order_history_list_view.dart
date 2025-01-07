@@ -182,7 +182,7 @@ class _HistoryCard extends StatelessWidget {
                     ?.copyWith(fontWeight: FontWeight.bold),
               ).expanded(),
               Text(
-                '$hotelCurrency${item.billingDetails?.totalDue}',
+                '$hotelCurrency ${item.billingDetails?.totalDue}',
                 style: textStyles.bodyMedium,
               ),
             ],
@@ -206,19 +206,31 @@ class _HistoryCard extends StatelessWidget {
       itemBuilder: (context, index) {
         var item = items.elementAt(index);
 
+        String? itemName = '';
+
+        if (item.item?.name != null) {
+          itemName = item.item?.name!;
+        }
+
+        if (item.item?.name == null && item.housekeepingItem?.name != null) {
+          itemName = item.housekeepingItem?.name!;
+        }
+
+        if (item.upsellItem != null) {
+          itemName = item.upsellItem?.name;
+        }
+
         return Row(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (item.item?.name != null) ...[
-                  Text(
-                    '${item.item?.name}',
-                    style: textStyles.bodyMedium,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ],
+                Text(
+                  '$itemName',
+                  style: textStyles.bodyMedium,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
                 if (item.housekeepingItem?.name != null) ...[
                   Text(
                     '${item.housekeepingItem?.name}',

@@ -329,11 +329,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
                               TextButton(
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    _orderCubit
-                                        .rejectOrder(rejectController.text)
-                                        .then((v) {
-                                      Navigator.pop(context);
-                                    });
+                                    _orderCubit.rejectOrder(
+                                        rejectController.text,
+                                        shouldPop: true);
                                   }
                                 },
                                 child: const Text(

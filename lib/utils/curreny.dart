@@ -7,7 +7,7 @@ String get hotelCurrency {
   var currenyName =
       getIt.get<SharedPreferences>().getString(PrefKeys.curreny.name);
 
-  var format = NumberFormat.simpleCurrency(name: currenyName);
+  var format = NumberFormat.currency(name: currenyName);
 
   return format.currencySymbol;
 }
