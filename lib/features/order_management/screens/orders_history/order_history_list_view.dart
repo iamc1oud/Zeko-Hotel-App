@@ -231,7 +231,8 @@ class _HistoryCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                if (item.housekeepingItem?.name != null) ...[
+                if (item.housekeepingItem?.name != null &&
+                    itemName == null) ...[
                   Text(
                     '${item.housekeepingItem?.name}',
                     style: textStyles.bodyMedium,
