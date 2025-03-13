@@ -171,6 +171,32 @@ class _HistoryCard extends StatelessWidget {
             ],
           ),
           Spacing.hmed,
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              padding: Paddings.padding,
+              decoration: BoxDecoration(
+                color: item.orderStatus == 'REJECTED'
+                    ? Colors.red[100]
+                    : item.orderStatus == 'PENDING'
+                        ? Colors.yellow[100]
+                        : Colors.green[100],
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                item.orderStatus ?? 'N/A',
+                style: textStyles.bodySmall?.copyWith(
+                  color: item.orderStatus == 'REJECTED'
+                      ? Colors.red[900]
+                      : item.orderStatus == 'PENDING'
+                          ? Colors.black
+                          : Colors.green[900],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Spacing.hmed,
           const Divider(),
           itemListing(item.items, context),
           const Divider(),
@@ -182,7 +208,7 @@ class _HistoryCard extends StatelessWidget {
                     ?.copyWith(fontWeight: FontWeight.bold),
               ).expanded(),
               Text(
-                '$hotelCurrency${item.billingDetails?.totalDue}',
+                '$hotelCurrency ${item.billingDetails?.totalDue}',
                 style: textStyles.bodyMedium,
               ),
             ],
@@ -206,20 +232,33 @@ class _HistoryCard extends StatelessWidget {
       itemBuilder: (context, index) {
         var item = items.elementAt(index);
 
+        String? itemName = '';
+
+        if (item.item?.name != null) {
+          itemName = item.item?.name!;
+        }
+
+        if (item.item?.name == null && item.housekeepingItem?.name != null) {
+          itemName = item.housekeepingItem?.name!;
+        }
+
+        if (item.upsellItem != null) {
+          itemName = item.upsellItem?.name;
+        }
+
         return Row(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (item.item?.name != null) ...[
-                  Text(
-                    '${item.item?.name}',
-                    style: textStyles.bodyMedium,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ],
-                if (item.housekeepingItem?.name != null) ...[
+                Text(
+                  '$itemName',
+                  style: textStyles.bodyMedium,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                if (item.housekeepingItem?.name != null &&
+                    itemName == null) ...[
                   Text(
                     '${item.housekeepingItem?.name}',
                     style: textStyles.bodyMedium,

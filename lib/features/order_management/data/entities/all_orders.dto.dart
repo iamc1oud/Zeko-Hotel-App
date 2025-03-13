@@ -1,5 +1,3 @@
-import 'package:zeko_hotel_crm/main.dart';
-
 class AllOrders {
   List<OrderPlaced>? data;
   String? message;
@@ -86,7 +84,7 @@ class OrderPlaced {
     acceptedAt = json['acceptedAt'];
     acceptedBy = json['acceptedBy'];
     isEscalated = json['isEscalated'];
-    coupon = json['coupon'];
+    // coupon = json['coupon'];
     rejectReason = json['rejectReason'];
     billingDetails = json['billingDetails'] != null
         ? BillingDetails.fromJson(json['billingDetails'])

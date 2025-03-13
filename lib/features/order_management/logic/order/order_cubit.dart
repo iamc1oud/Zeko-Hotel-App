@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:zeko_hotel_crm/core/navigation/app_navigation.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/repository/orders_repository.dart';
@@ -92,7 +94,7 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
-  Future rejectOrder(String reason) async {
+  Future rejectOrder(String reason, {bool shouldPop = false}) async {
     var command = RejectOrderDTO(orderId: state.order!.id, reason: reason);
 
     var response = await orderRepository.rejectOrder(command);
@@ -105,6 +107,9 @@ class OrderCubit extends Cubit<OrderState> {
       showSnackbar(r.message);
       emit(state.copyWith(isLoading: false));
       manageOrdersCubit.getPendingOrders();
+      if (shouldPop) {
+        Navigator.pop(navigatorKey.currentContext!);
+      }
     });
   }
 }

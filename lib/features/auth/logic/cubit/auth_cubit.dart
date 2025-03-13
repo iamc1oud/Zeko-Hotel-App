@@ -67,7 +67,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
           phoneNumber: phoneNumberController.text.replaceAll('+', ''),
           password: passwordController.text);
 
-      logger.d(result);
+      logger.d(phoneNumberController.text.replaceAll('+', ''));
 
       if (result.data!.isPasswordCorrect == false) {
         AlertController.show('Invalid password', '', TypeAlert.error);
@@ -141,11 +141,12 @@ class AuthCubit extends HydratedCubit<AuthState> {
     return deviceId ?? '';
   }
 
-  void logout() {
+  void logout() async {
     try {
       phoneNumberController.clear();
       passwordController.clear();
       emit(state.copyWith(isSignedIn: false, isSuperuser: false));
+      await FirebaseMessaging.instance.deleteToken();
       AppNavigator.slideReplacement(const LoginView());
     } catch (e) {
       logger.e('Error popping: $e');

@@ -140,10 +140,23 @@ class _OrderItemCardState extends State<OrderItemCard> {
             context.read<OrderCubit>().toggleItemCheck(v!, item);
           },
           contentPadding: EdgeInsets.zero,
-          title: Text(
-            '${item.item.item?.name}',
-            style: textStyles.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
+          title: Builder(builder: (context) {
+            if (item.item.item?.name != null) {
+              return Text(
+                '${item.item.item?.name}',
+                style: textStyles.bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              );
+            } else if (item.item.housekeepingItem?.name != null) {
+              return Text(
+                '${item.item.housekeepingItem?.name}',
+                style: textStyles.bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              );
+            }
+
+            return const SizedBox();
+          }),
           dense: true,
           subtitle: Row(
             children: [
@@ -169,7 +182,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
                         ).expanded(),
                       ],
                       // If discount price is not available, then show the original price.
-                      if (item.item.item?.discPrice == null) ...[
+                      if (item.item.item?.discPrice == null &&
+                          item.item.item?.price != null) ...[
                         Text(
                           '$hotelCurrency${item.item.item?.price.toString().removeZero()}',
                           style: textStyles.bodyMedium,
@@ -329,11 +343,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
                               TextButton(
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    _orderCubit
-                                        .rejectOrder(rejectController.text)
-                                        .then((v) {
-                                      Navigator.pop(context);
-                                    });
+                                    _orderCubit.rejectOrder(
+                                        rejectController.text,
+                                        shouldPop: true);
                                   }
                                 },
                                 child: const Text(

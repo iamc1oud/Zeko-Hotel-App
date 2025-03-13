@@ -1,3 +1,5 @@
+import 'package:zeko_hotel_crm/features/order_management/data/entities/all_orders.dto.dart';
+
 class PendingOrdersDTO {
   Map<String, List<OrderCategory>> categories;
 
@@ -90,21 +92,24 @@ class OrderItem {
   ItemDetails? item;
   int? quantity;
   bool? isAccepted;
+  HousekeepingItem? housekeepingItem;
 
-  OrderItem({
-    this.id,
-    this.item,
-    this.quantity,
-    this.isAccepted,
-  });
+  OrderItem(
+      {this.id,
+      this.item,
+      this.quantity,
+      this.isAccepted,
+      this.housekeepingItem});
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
-      id: json['id'],
-      item: json['item'] != null ? ItemDetails.fromJson(json['item']) : null,
-      quantity: json['quantity'],
-      isAccepted: json['isAccepted'],
-    );
+        id: json['id'],
+        item: json['item'] != null ? ItemDetails.fromJson(json['item']) : null,
+        quantity: json['quantity'],
+        isAccepted: json['isAccepted'],
+        housekeepingItem: json['housekeepingItem'] != null
+            ? HousekeepingItem.fromJson(json['housekeepingItem'])
+            : null);
   }
 
   Map<String, dynamic> toJson() {
