@@ -171,6 +171,32 @@ class _HistoryCard extends StatelessWidget {
             ],
           ),
           Spacing.hmed,
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              padding: Paddings.padding,
+              decoration: BoxDecoration(
+                color: item.orderStatus == 'REJECTED'
+                    ? Colors.red[100]
+                    : item.orderStatus == 'PENDING'
+                        ? Colors.yellow[100]
+                        : Colors.green[100],
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                item.orderStatus ?? 'N/A',
+                style: textStyles.bodySmall?.copyWith(
+                  color: item.orderStatus == 'REJECTED'
+                      ? Colors.red[900]
+                      : item.orderStatus == 'PENDING'
+                          ? Colors.black
+                          : Colors.green[900],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Spacing.hmed,
           const Divider(),
           itemListing(item.items, context),
           const Divider(),

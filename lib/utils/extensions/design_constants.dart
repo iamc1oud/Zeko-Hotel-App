@@ -42,6 +42,7 @@ class Insets {
 
 class Paddings {
   static final contentPadding = EdgeInsets.all(Insets.med);
+  static const padding = EdgeInsets.all(8.0);
   static final horizontalPadding = EdgeInsets.symmetric(horizontal: Insets.med);
   static final verticalPadding = EdgeInsets.symmetric(vertical: Insets.med);
 
