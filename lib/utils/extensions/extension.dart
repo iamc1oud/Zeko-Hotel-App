@@ -50,6 +50,12 @@ extension StringExtension on String {
     String s = toString().replaceAll(regex, '');
     return s;
   }
+
+  String enumToTitleCase() => replaceAll('_', ' ').toTitleCase();
+  String get toSentenceCase =>
+      '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+  String get allToCapital => toUpperCase();
+  String toTitleCase() => split(" ").map((str) => str.toSentenceCase).join(" ");
 }
 
 extension Common on Widget {

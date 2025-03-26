@@ -184,7 +184,7 @@ class _HistoryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                item.orderStatus ?? 'N/A',
+                item.orderStatus?.enumToTitleCase() ?? 'N/A',
                 style: textStyles.bodySmall?.copyWith(
                   color: item.orderStatus == 'REJECTED'
                       ? Colors.red[900]
@@ -231,6 +231,10 @@ class _HistoryCard extends StatelessWidget {
       separatorBuilder: (__, _) => const Divider(),
       itemBuilder: (context, index) {
         var item = items.elementAt(index);
+
+        if (item.isAccepted == false) {
+          return const SizedBox();
+        }
 
         String? itemName = '';
 
