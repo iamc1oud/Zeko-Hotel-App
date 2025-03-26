@@ -66,7 +66,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
           // Remove leading + from number
           phoneNumber: phoneNumberController.text.replaceAll('+', ''),
           password: passwordController.text);
-
+      logger.d(result.toJson());
       logger.d(phoneNumberController.text.replaceAll('+', ''));
 
       if (result.data!.isPasswordCorrect == false) {

@@ -1,0 +1,2 @@
+/Volumes/DevZone/Development/Zeko/Project/flutter-hotel-app/zeko_hotel_crm/android/app/.cxx/RelWithDebInfo/5w5h1n2x/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Volumes/DevZone/Development/Zeko/Project/flutter-hotel-app/zeko_hotel_crm/android/app/.cxx/RelWithDebInfo/5w5h1n2x/armeabi-v7a/CMakeFiles/edit_cache.dir

@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "/Volumes/DevZone/Applications/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Volumes/DevZone/Library/Android/sdk/cmake/3.18.1/bin/ninja",
+      "-C",
+      "/Volumes/DevZone/Development/Zeko/Project/flutter-hotel-app/zeko_hotel_crm/android/app/.cxx/RelWithDebInfo/5w5h1n2x/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Volumes/DevZone/Library/Android/sdk/cmake/3.18.1/bin/ninja",
+    "-C",
+    "/Volumes/DevZone/Development/Zeko/Project/flutter-hotel-app/zeko_hotel_crm/android/app/.cxx/RelWithDebInfo/5w5h1n2x/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {},
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Volumes/DevZone/Library/Android/sdk/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Volumes/DevZone/Library/Android/sdk/ndk/26.3.11579264/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": []
+}
