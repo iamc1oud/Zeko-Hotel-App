@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeko_hotel_crm/core/storage/storage.dart';
-import 'package:zeko_hotel_crm/main.dart';
 
 class HttpService {
   final String baseUrl;
@@ -20,7 +19,8 @@ class HttpService {
     Map<String, dynamic>? queryParams,
     Map<String, dynamic>? headers,
   }) async {
-    var token = getIt.get<SharedPreferences>().getString(PrefKeys.token.name);
+    var token =
+        (await SharedPreferences.getInstance()).getString(PrefKeys.token.name);
 
     final url = buildUrl(endpoint: endpoint, queryParams: queryParams);
 
