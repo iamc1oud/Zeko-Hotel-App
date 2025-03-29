@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
               bottom:
                   const TabBar(indicatorSize: TabBarIndicatorSize.label, tabs: [
                 Tab(
-                  child: Text('Manager Orders'),
+                  child: Text('Manage Orders'),
                 ),
                 Tab(
                   child: Text('Order History'),

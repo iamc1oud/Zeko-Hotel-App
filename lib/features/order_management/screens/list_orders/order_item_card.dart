@@ -29,7 +29,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      lazy: false,
+      lazy: true,
       create: (context) {
         _orderCubit = OrderCubit(
             orderRepository: getIt.get(),
@@ -140,23 +140,23 @@ class _OrderItemCardState extends State<OrderItemCard> {
             context.read<OrderCubit>().toggleItemCheck(v!, item);
           },
           contentPadding: EdgeInsets.zero,
-          title: Builder(builder: (context) {
-            if (item.item.item?.name != null) {
-              return Text(
-                '${item.item.item?.name}',
-                style: textStyles.bodyMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              );
-            } else if (item.item.housekeepingItem?.name != null) {
-              return Text(
-                '${item.item.housekeepingItem?.name}',
-                style: textStyles.bodyMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              );
-            }
-
-            return const SizedBox();
-          }),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (item.item.item?.name != null)
+                Text(
+                  '${item.item.item?.name}',
+                  style: textStyles.bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              if (item.item.housekeepingItem?.name != null)
+                Text(
+                  '${item.item.housekeepingItem?.name}',
+                  style: textStyles.bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+            ],
+          ),
           dense: true,
           subtitle: Row(
             children: [
