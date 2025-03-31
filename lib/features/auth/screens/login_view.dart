@@ -108,7 +108,7 @@ class _LoginViewState extends State<LoginView>
                                   return null;
                                 },
                                 obscureText: true,
-                              ).addLabel(Strings!.password),
+                              ).addLabel('Password'),
                               Spacing.hlg,
                               AnimatedButton(
                                 state: authState.loadingState,

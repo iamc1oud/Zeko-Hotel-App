@@ -69,7 +69,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
               widget.onChanged.call('${_selectedCountry!.number}$v');
             },
             decoration: InputDecoration(
-              hintText: Strings!.phoneNumber,
+              hintText: 'Phone Number',
               floatingLabelAlignment: FloatingLabelAlignment.start,
               prefixIcon: DropdownButton<Country>(
                 borderRadius: Corners.lgBorder,
@@ -105,6 +105,6 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             ],
             keyboardType: const TextInputType.numberWithOptions(
                 decimal: false, signed: false),
-          ).addLabel(Strings!.phoneNumber);
+          ).addLabel('Phone Number');
   }
 }

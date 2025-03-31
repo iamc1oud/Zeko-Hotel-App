@@ -2,13 +2,24 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeko_hotel_crm/core/networking/http_service.dart';
 import 'package:zeko_hotel_crm/core/networking/response_api.dart';
+import 'package:zeko_hotel_crm/core/storage/shared_preferences.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/entities/pending_orders.dto.dart';
 import 'package:zeko_hotel_crm/features/order_management/data/order_management_endpoints.dart';
 import 'package:zeko_hotel_crm/main.dart';
 import 'package:zeko_hotel_crm/utils/constants.dart';
+
+@pragma('vm:entry-point')
+Future<bool> onIosBackground(ServiceInstance service) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+
+  return true;
+}
 
 @pragma('vm:entry-point')
 void androidBackgroundStart(ServiceInstance service) async {
@@ -17,11 +28,9 @@ void androidBackgroundStart(ServiceInstance service) async {
   // Audio player for the bell sound
   final audioPlayer = AudioPlayer();
   await audioPlayer.setSource(AssetSource('sounds/bell.wav'));
+
   // Flag to track if music is currently playing
   bool isMusicPlaying = false;
-
-  // Variable to store if we previously had empty orders
-  bool hadEmptyOrders = false;
 
   // Setup music looping when complete
   audioPlayer.onPlayerComplete.listen((event) {
@@ -29,6 +38,9 @@ void androidBackgroundStart(ServiceInstance service) async {
       audioPlayer.play(AssetSource('sounds/bell.wav'));
     }
   });
+
+  // Variable to store if we previously had empty orders
+  bool hadOrders = false;
 
   // If you need to respond to app interactions
   if (service is AndroidServiceInstance) {
@@ -56,25 +68,42 @@ void androidBackgroundStart(ServiceInstance service) async {
         title: "Order Monitor",
         content: "Music stopped. Still monitoring for empty orders.",
       );
+      service.stopSelf();
     }
   });
 
-  // Define your API check interval (e.g., every 15 seconds)
-  // Define your API check interval (e.g., every 5 seconds)
-  Timer.periodic(const Duration(seconds: 5), (timer) async {
-    await checkForEmptyOrders(
-            service, audioPlayer, isMusicPlaying, hadEmptyOrders)
-        .then((result) {
-      isMusicPlaying = result['isMusicPlaying']!;
-      hadEmptyOrders = result['hadEmptyOrders']!;
+  service.on('start').listen((event) {
+    logger.d("Event: start triggered");
+    Timer.periodic(const Duration(seconds: 5), (timer) async {
+      await checkForEmptyOrders(service, audioPlayer, isMusicPlaying, hadOrders)
+          .then((result) {
+        isMusicPlaying = result['isMusicPlaying'] ?? false;
+        hadOrders = result['hasOrders'] ?? false;
+      });
     });
   });
+
+  var isLoggedIn =
+      (await SharedPreferences.getInstance()).getString(PrefKeys.token.name);
+
+  if (isLoggedIn?.isNotEmpty == true) {
+    Timer.periodic(const Duration(seconds: 5), (timer) async {
+      await checkForEmptyOrders(service, audioPlayer, isMusicPlaying, hadOrders)
+          .then((result) {
+        isMusicPlaying = result['isMusicPlaying'] ?? false;
+        hadOrders = result['hasOrders'] ?? false;
+      });
+    });
+  } else {
+    logger.e("Stop listening to order");
+    service.invoke('stopMusic');
+  }
 }
 
 HttpService httpService = HttpService(baseUrl: API_URL);
 
 Future<Map<String, bool>> checkForEmptyOrders(ServiceInstance service,
-    AudioPlayer audioPlayer, bool isMusicPlaying, bool hadEmptyOrders) async {
+    AudioPlayer audioPlayer, bool isMusicPlaying, bool hasOrders) async {
   try {
     // Replace with your actual API endpoint
     final response =
@@ -104,7 +133,7 @@ Future<Map<String, bool>> checkForEmptyOrders(ServiceInstance service,
 
         // Optional: Send alert to the main app if it's running
         service.invoke('onEmptyOrdersDetected',
-            {'timestamp': DateTime.now().toIso8601String(), 'orderCount': 1});
+            {'timestamp': DateTime.now().toIso8601String()});
       } else if (!hasOrders && isMusicPlaying) {
         // Stop music if there are no more empty orders
         await audioPlayer.stop();
@@ -119,12 +148,12 @@ Future<Map<String, bool>> checkForEmptyOrders(ServiceInstance service,
       // Track if we had empty orders in this check
       hasOrders = hasOrders;
 
-      return {'isMusicPlaying': isMusicPlaying, 'hadEmptyOrders': hasOrders};
+      return {'isMusicPlaying': isMusicPlaying, 'hasOrders': hasOrders};
     }
   } catch (e) {
     print('Error checking orders: $e');
   }
 
   // Return unchanged values if there was an error
-  return {'isMusicPlaying': isMusicPlaying, 'hadEmptyOrders': hadEmptyOrders};
+  return {'isMusicPlaying': isMusicPlaying, 'hasOrders': hasOrders};
 }

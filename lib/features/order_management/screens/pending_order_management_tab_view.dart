@@ -27,15 +27,7 @@ class _OrderManagementTabViewState extends State<OrderManagementTabView> {
     _timer = Timer.periodic(const Duration(seconds: 5),
         (_) => _manageOrdersCubit.getPendingOrders(polling: true));
 
-    final service = FlutterBackgroundService();
-
-    service.startService();
-
-    service.on('onNewData').listen((event) {
-      if (event != null) {
-        logger.d(event);
-      }
-    });
+    FlutterBackgroundService().invoke('start');
 
     super.initState();
   }

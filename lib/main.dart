@@ -21,14 +21,13 @@ import 'package:zeko_hotel_crm/core/core.dart';
 import 'package:zeko_hotel_crm/features/auth/data/repository/auth_repository.dart';
 import 'package:zeko_hotel_crm/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:zeko_hotel_crm/features/auth/screens/auth_screens.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:zeko_hotel_crm/firebase_options.dart';
 import 'package:zeko_hotel_crm/utils/extensions/extensions.dart';
 
 // Global Navigation key
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-final Strings = AppLocalizations.of(navigatorKey.currentContext!);
 final AppMediaQuery = MediaQuery.of(navigatorKey.currentContext!);
 final ThemeQuery = Theme.of(navigatorKey.currentContext!).colorScheme;
 TextTheme textStyles = Theme.of(navigatorKey.currentContext!).textTheme;
@@ -112,6 +111,34 @@ void showFlutterNotification(RemoteMessage message) {
   }
 }
 
+Future<void> initializeService() async {
+  final service = FlutterBackgroundService(); // Configure background service.
+
+  // Initialize notifications
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  await service.configure(
+      iosConfiguration: IosConfiguration(),
+      androidConfiguration: AndroidConfiguration(
+          // foregroundServiceNotificationId: 124,
+          // notificationChannelId: 'order_alert',
+          onStart: androidBackgroundStart,
+          // initialNotificationTitle: 'Order Monitor',
+          // initialNotificationContent: 'Monitoring for order service',
+          autoStart: true,
+          isForegroundMode: true,
+          autoStartOnBoot: true));
+}
+
 Future<void> main() async {
   ScaledWidgetsFlutterBinding.ensureInitialized(
     scaleFactor: (deviceSize) {
@@ -121,7 +148,7 @@ Future<void> main() async {
     },
   );
 
-  final service = FlutterBackgroundService();
+  // await initializeService();
 
   // Register firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -152,12 +179,6 @@ Future<void> main() async {
         : await getApplicationDocumentsDirectory(),
   );
 
-  // Configure background service.
-  await service.configure(
-      iosConfiguration: IosConfiguration(),
-      androidConfiguration: AndroidConfiguration(
-          onStart: androidBackgroundStart, isForegroundMode: true));
-
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -177,13 +198,11 @@ class ZekoApp extends StatelessWidget {
       title: 'Zeko',
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
-        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate
       ],
       navigatorKey: navigatorKey,
-      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         fontFamily: GoogleFonts.roboto().fontFamily,
         appBarTheme: const AppBarTheme(

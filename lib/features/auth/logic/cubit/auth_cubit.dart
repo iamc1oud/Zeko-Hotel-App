@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_dropdown_alert/alert_controller.dart';
 import 'package:flutter_dropdown_alert/model/data_alert.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -89,6 +90,8 @@ class AuthCubit extends HydratedCubit<AuthState> {
           await authRepository.updateFCMToken(token: token, deviceId: deviceId);
         }
 
+        await initializeService();
+
         emit(state.copyWith(
           isSignedIn: true,
           loadingState: ButtonState.idle,
@@ -147,7 +150,12 @@ class AuthCubit extends HydratedCubit<AuthState> {
       passwordController.clear();
       emit(state.copyWith(isSignedIn: false, isSuperuser: false));
       await FirebaseMessaging.instance.deleteToken();
+      await (await SharedPreferences.getInstance()).clear();
       AppNavigator.slideReplacement(const LoginView());
+
+      // Stop background service also.
+      final service = FlutterBackgroundService();
+      service.invoke('stopService');
     } catch (e) {
       logger.e('Error popping: $e');
     }
